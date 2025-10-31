@@ -20,7 +20,7 @@ h1{font-size:20px;background:linear-gradient(90deg,var(--accent),#7ef0d0);-webki
 main{padding:20px;}
 .card{background:var(--card-bg);border-radius:12px;padding:20px;min-height:500px;position:relative;}
 h2{margin:0;font-size:22px;color:transparent;background:linear-gradient(90deg,var(--accent),#7af1da);-webkit-background-clip:text;}
-.desc{margin-top:10px;color:var(--muted);}
+.desc{margin-top:10px;color:var(--muted);line-height:1.5;font-size:15px;}
 .chart-wrap{margin-top:20px;background:rgba(0,0,0,0.2);padding:15px;border-radius:12px;}
 .controls{margin-top:15px;display:flex;gap:10px;}
 .btn{padding:8px 12px;background:none;border:1px solid rgba(0,200,167,0.3);border-radius:8px;color:#bafbe8;cursor:pointer;}
@@ -36,7 +36,7 @@ h2{margin:0;font-size:22px;color:transparent;background:linear-gradient(90deg,va
 <main>
 <div class="card">
 <h2 id="topicTitle">Welcome</h2>
-<p class="desc" id="topicDesc">Click a topic to see how AI changed areas in last decade with charts and stats.</p>
+<p class="desc" id="topicDesc">Click a topic to see how AI changed different areas over the last 10 years. Charts show key statistics and trends that highlight the impact of AI in real life.</p>
 <div id="sourceNote" class="desc" style="font-size:12px;color:#9aa7b5;margin-top:10px;">Source: Global AI reports 2024</div>
 <div class="chart-wrap"><canvas id="chartCanvas"></canvas></div>
 <div class="controls">
@@ -49,16 +49,16 @@ h2{margin:0;font-size:22px;color:transparent;background:linear-gradient(90deg,va
 
 <script>
 const topics=[
-{title:"1. Healthcare",desc:"AI helps doctors detect illnesses earlier and supports precise treatments.",chart:"bar",stats:[{label:"Accuracy",value:93},{label:"Speed",value:85},{label:"Adoption",value:75}],source:"WHO & AI 2024"},
-{title:"2. Transportation",desc:"Smart driving systems and predictive maintenance improved travel safety.",chart:"line",stats:[{label:"Safety",value:78},{label:"Efficiency",value:68},{label:"Adoption",value:55}],source:"Transport AI 2023-24"},
-{title:"3. Education",desc:"Adaptive tutors personalize lessons making learning faster and engaging.",chart:"pie",stats:[{label:"Personalization",value:80},{label:"Access",value:70},{label:"Motivation",value:65}],source:"OECD 2024"},
-{title:"4. Entertainment",desc:"AI recommends content, composes music, creates immersive games.",chart:"doughnut",stats:[{label:"Recs",value:90},{label:"Creation",value:75},{label:"Engagement",value:88}],source:"Media reports 2023-24"},
-{title:"5. Communication",desc:"Real-time translation, smarter chatbots and voice assistants improved global communication.",chart:"bar",stats:[{label:"Translation",value:88},{label:"Voice AI",value:80},{label:"Speed",value:85}],source:"Comm studies 2022-24"},
-{title:"6. Jobs & Economy",desc:"Automation changed tasks; new AI roles increased.",chart:"radar",stats:[{label:"Productivity",value:85},{label:"Automation",value:70},{label:"New Jobs",value:60}],source:"McKinsey 2024"},
-{title:"7. Social Media",desc:"AI personalizes feeds but raises privacy concerns.",chart:"polarArea",stats:[{label:"Recommendations",value:95},{label:"Ads",value:85},{label:"Privacy",value:40}],source:"Research 2023-24"},
-{title:"8. Home & Lifestyle",desc:"Smart devices manage lighting, heating, chores, improving comfort.",chart:"bar",stats:[{label:"Comfort",value:85},{label:"Energy Save",value:75},{label:"Usage",value:65}],source:"IoT reports 2023-24"},
-{title:"9. Security",desc:"AI detects threats faster, protecting people and companies.",chart:"doughnut",stats:[{label:"Detection",value:90},{label:"Response",value:82},{label:"Accuracy",value:88}],source:"Cybersecurity 2024"},
-{title:"10. The Future",desc:"AI will grow and support medicine, climate, exploration ethically.",chart:"pie",stats:[{label:"Innovation",value:95},{label:"Ethics Focus",value:72},{label:"Trust",value:60}],source:"Global AI 2024"}
+{title:"1. Healthcare",desc:"AI supports doctors by detecting illnesses faster and helps with precise treatment planning. It improves patient care, reduces errors, and speeds up medical decisions.",chart:"bar",stats:[{label:"Accuracy",value:93},{label:"Speed",value:85},{label:"Adoption",value:75}],source:"WHO & AI 2024"},
+{title:"2. Transportation",desc:"AI helps vehicles drive smarter, routes get optimized, and maintenance is predicted. This makes travel safer, faster, and more efficient.",chart:"line",stats:[{label:"Safety",value:78},{label:"Efficiency",value:68},{label:"Adoption",value:55}],source:"Transport AI 2023-24"},
+{title:"3. Education",desc:"AI provides adaptive tutors that personalize learning for each student. Lessons are more effective, engaging, and easier to follow.",chart:"pie",stats:[{label:"Personalization",value:80},{label:"Access",value:70},{label:"Motivation",value:65}],source:"OECD 2024"},
+{title:"4. Entertainment",desc:"AI recommends movies, creates music, and enhances games. Users get personalized experiences and more enjoyable media.",chart:"doughnut",stats:[{label:"Recs",value:90},{label:"Creation",value:75},{label:"Engagement",value:88}],source:"Media reports 2023-24"},
+{title:"5. Communication",desc:"AI translates languages in real-time and improves chatbots. Talking and collaborating worldwide is easier than ever.",chart:"bar",stats:[{label:"Translation",value:88},{label:"Voice AI",value:80},{label:"Speed",value:85}],source:"Comm studies 2022-24"},
+{title:"6. Jobs & Economy",desc:"Automation handles repetitive tasks, freeing humans for creative work. New jobs in AI, design, and data analysis are growing.",chart:"radar",stats:[{label:"Productivity",value:85},{label:"Automation",value:70},{label:"New Jobs",value:60}],source:"McKinsey 2024"},
+{title:"7. Social Media",desc:"AI decides what content you see, personalizing feeds. It increases engagement but raises privacy and echo chamber concerns.",chart:"polarArea",stats:[{label:"Recommendations",value:95},{label:"Ads",value:85},{label:"Privacy",value:40}],source:"Research 2023-24"},
+{title:"8. Home & Lifestyle",desc:"Smart homes use AI for lighting, heating, and chores. Daily life becomes easier, more energy-efficient, and comfortable.",chart:"bar",stats:[{label:"Comfort",value:85},{label:"Energy Save",value:75},{label:"Usage",value:65}],source:"IoT reports 2023-24"},
+{title:"9. Security",desc:"AI monitors threats and fraud, protecting people and businesses. Detection is faster and security systems are stronger.",chart:"doughnut",stats:[{label:"Detection",value:90},{label:"Response",value:82},{label:"Accuracy",value:88}],source:"Cybersecurity 2024"},
+{title:"10. The Future",desc:"AI will continue helping medicine, climate action, and exploration. Ethics and strong rules will guide its growth responsibly.",chart:"pie",stats:[{label:"Innovation",value:95},{label:"Ethics Focus",value:72},{label:"Trust",value:60}],source:"Global AI 2024"}
 ];
 
 let current=0;
@@ -83,7 +83,7 @@ function renderChart(topic){
         legend:{labels:{color:"#eaf6f5"}},
         datalabels:{
           color:"#fff",
-          font:{weight:"bold",size:14},
+          font:{weight:"bold",size:12},
           anchor:'end',
           align:'end',
           formatter:(val)=>val+"%"
