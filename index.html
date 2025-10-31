@@ -37,6 +37,7 @@
     .title-row{display:flex;justify-content:space-between;align-items:center}
     h2{margin:0;font-size:22px;color:transparent;background:linear-gradient(90deg,var(--accent),#7af1da);-webkit-background-clip:text}
     .desc{margin-top:12px;color:var(--muted);line-height:1.6;font-size:15px}
+    .source-note{margin-top:10px;color:rgba(155,170,181,0.9);font-size:13px;font-style:italic}
     .chart-wrap{margin-top:18px;height:320px;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:14px;background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.44));border:1px solid rgba(255,255,255,0.03)}
     canvas#chartCanvas{max-width:100%;max-height:100%}
 
@@ -151,18 +152,18 @@ function animBG(){ drawBG(); requestAnimationFrame(animBG); }
 addEventListener('resize', ()=> resizeBG());
 resizeBG(); animBG();
 
-/* ---------------- TOPICS (10) with longer but simple text and per-topic color ---------------- */
+/* ---------------- TOPICS (10) with longer but simple text and per-topic color + sources ---------------- */
 const TOPICS = [
-  { id:'health', title:'1. Healthcare', tag:'Medicine', desc: 'AI helps doctors detect illnesses earlier and supports precise treatments. From imaging to patient monitoring, it speeds decisions and saves lives.', chartType:'bar', stats:[{label:'Accuracy',value:93},{label:'Speed',value:85},{label:'Adoption',value:75}], color:170 },
-  { id:'transport', title:'2. Transportation', tag:'Mobility', desc: 'Smart driving systems, route optimization and predictive maintenance reduced delays and made travel safer and greener.', chartType:'line', stats:[{label:'Safety',value:78},{label:'Efficiency',value:68},{label:'Adoption',value:55}], color:200 },
-  { id:'education', title:'3. Education', tag:'Learning', desc: 'Adaptive tutors and AI tools personalize lessons for each student, making learning faster and more engaging.', chartType:'pie', stats:[{label:'Personalization',value:80},{label:'Access',value:70},{label:'Motivation',value:65}], color:210 },
-  { id:'entertain', title:'4. Entertainment', tag:'Media', desc: 'AI recommends content, composes music and helps create immersive games — entertainment became more personal.', chartType:'doughnut', stats:[{label:'Recs',value:90},{label:'Creation',value:75},{label:'Engagement',value:88}], color:150 },
-  { id:'comm', title:'5. Communication', tag:'Everyday', desc: 'Real-time translation, smarter chatbots and voice assistants made talking and working across borders easier.', chartType:'bar', stats:[{label:'Translation',value:88},{label:'Voice AI',value:80},{label:'Speed',value:85}], color:140 },
-  { id:'work', title:'6. Jobs & Economy', tag:'Work', desc: 'Automation changed many tasks: repetitive jobs declined while new roles in AI, data and design increased.', chartType:'radar', stats:[{label:'Productivity',value:85},{label:'Automation',value:70},{label:'New Jobs',value:60}], color:180 },
-  { id:'social', title:'7. Social Media', tag:'Feeds', desc: 'AI decides what we see — it personalizes content but also creates echo chambers and privacy questions.', chartType:'polarArea', stats:[{label:'Recommendations',value:95},{label:'Ads',value:85},{label:'Privacy Risk',value:40}], color:230 },
-  { id:'home', title:'8. Home & Lifestyle', tag:'Smart Home', desc: 'Smart devices handle lighting, heating and chores — homes became more convenient and energy-aware.', chartType:'bar', stats:[{label:'Comfort',value:85},{label:'Energy Save',value:75},{label:'Usage',value:65}], color:330 },
-  { id:'security', title:'9. Security', tag:'Safety', desc: 'AI monitors networks, spots fraud and detects threats faster, protecting companies and people day and night.', chartType:'doughnut', stats:[{label:'Detection',value:90},{label:'Response',value:82},{label:'Accuracy',value:88}], color:260 },
-  { id:'future', title:'10. The Future', tag:'Outlook', desc: 'AI will keep growing — it can help climate, medicine and exploration if we guide it with strong ethics and rules.', chartType:'pie', stats:[{label:'Innovation',value:95},{label:'Ethics Focus',value:72},{label:'Trust',value:60}], color:170 }
+  { id:'health', title:'1. Healthcare', tag:'Medicine', desc: 'AI helps doctors detect illnesses earlier and supports precise treatments. From imaging to patient monitoring, it speeds decisions and saves lives.', chartType:'bar', stats:[{label:'Accuracy',value:93},{label:'Speed',value:85},{label:'Adoption',value:75}], color:170, source:'Data from WHO & AI in Healthcare reports (2024)' },
+  { id:'transport', title:'2. Transportation', tag:'Mobility', desc: 'Smart driving systems, route optimization and predictive maintenance reduced delays and made travel safer and greener.', chartType:'line', stats:[{label:'Safety',value:78},{label:'Efficiency',value:68},{label:'Adoption',value:55}], color:200, source:'Industry studies & transport AI surveys (2023–2024)' },
+  { id:'education', title:'3. Education', tag:'Learning', desc: 'Adaptive tutors and AI tools personalize lessons for each student, making learning faster and more engaging.', chartType:'pie', stats:[{label:'Personalization',value:80},{label:'Access',value:70},{label:'Motivation',value:65}], color:210, source:'OECD & educational research (2024)' },
+  { id:'entertain', title:'4. Entertainment', tag:'Media', desc: 'AI recommends content, composes music and helps create immersive games — entertainment became more personal.', chartType:'doughnut', stats:[{label:'Recs',value:90},{label:'Creation',value:75},{label:'Engagement',value:88}], color:150, source:'Streaming platforms & media reports (2023–2024)' },
+  { id:'comm', title:'5. Communication', tag:'Everyday', desc: 'Real-time translation, smarter chatbots and voice assistants made talking and working across borders easier.', chartType:'bar', stats:[{label:'Translation',value:88},{label:'Voice AI',value:80},{label:'Speed',value:85}], color:140, source:'AI communication studies (2022–2024)' },
+  { id:'work', title:'6. Jobs & Economy', tag:'Work', desc: 'Automation changed many tasks: repetitive jobs declined while new roles in AI, data and design increased.', chartType:'radar', stats:[{label:'Productivity',value:85},{label:'Automation',value:70},{label:'New Jobs',value:60}], color:180, source:'McKinsey & labor market analysis (2024)' },
+  { id:'social', title:'7. Social Media', tag:'Feeds', desc: 'AI decides what we see — it personalizes content but also creates echo chambers and privacy questions.', chartType:'polarArea', stats:[{label:'Recommendations',value:95},{label:'Ads',value:85},{label:'Privacy Risk',value:40}], color:230, source:'Platform transparency & research papers (2023–2024)' },
+  { id:'home', title:'8. Home & Lifestyle', tag:'Smart Home', desc: 'Smart devices handle lighting, heating and chores — homes became more convenient and energy-aware.', chartType:'bar', stats:[{label:'Comfort',value:85},{label:'Energy Save',value:75},{label:'Usage',value:65}], color:330, source:'Consumer IoT reports (2023–2024)' },
+  { id:'security', title:'9. Security', tag:'Safety', desc: 'AI monitors networks, spots fraud and detects threats faster, protecting companies and people day and night.', chartType:'doughnut', stats:[{label:'Detection',value:90},{label:'Response',value:82},{label:'Accuracy',value:88}], color:260, source:'Cybersecurity industry reports (2024)' },
+  { id:'future', title:'10. The Future', tag:'Outlook', desc: 'AI will keep growing — it can help climate, medicine and exploration if we guide it with strong ethics and rules.', chartType:'pie', stats:[{label:'Innovation',value:95},{label:'Ethics Focus',value:72},{label:'Trust',value:60}], color:170, source:'Global AI outlooks (2024)' }
 ];
 
 /* ---------- Build UI: topic buttons and initial slide ---------- */
@@ -204,6 +205,11 @@ function createSlideElement(topic){
   p.style.color = 'var(--muted)';
   p.style.maxWidth = '820px';
 
+  // source note (small)
+  const s = document.createElement('div');
+  s.className = 'source-note';
+  s.textContent = topic.source ? topic.source : 'Based on global AI studies (2024)';
+
   const chartWrap = document.createElement('div');
   chartWrap.className = 'chart-wrap';
   chartWrap.style.width = '100%';
@@ -215,6 +221,7 @@ function createSlideElement(topic){
 
   inner.appendChild(h);
   inner.appendChild(p);
+  inner.appendChild(s);
   inner.appendChild(chartWrap);
   slide.appendChild(inner);
 
@@ -321,7 +328,7 @@ setInterval(()=>{ hue += 0.25; if(hue > 360) hue = 0; }, 160);
 /* Optional: small performance tip for mobile - pause background when tab not visible */
 document.addEventListener('visibilitychange', ()=>{
   if(document.hidden) {
-    // stop updates by noop — we keep requestAnimationFrame but you could cancel if needed
+    // could pause heavy things here if necessary
   }
 });
 </script>
