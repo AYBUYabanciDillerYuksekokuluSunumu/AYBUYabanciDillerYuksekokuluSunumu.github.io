@@ -5,126 +5,203 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>How AI Changed Our Lives — Interactive</title>
   <style>
-    :root{--bg:#0f1724;--card:#0b1220;--accent:#06b6d4;--muted:#94a3b8;--glass:rgba(255,255,255,0.03)}
-    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
-    body{background:linear-gradient(180deg,#071024 0%, #071022 60%);color:#e6eef6;display:flex;align-items:center;justify-content:center;padding:28px}
-    .wrap{width:1100px;max-width:96%;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;box-shadow:0 10px 30px rgba(2,6,23,0.6);overflow:hidden;display:grid;grid-template-columns:340px 1fr;position:relative}
-    .sidebar{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));padding:22px}
-    h1{margin:0 0 6px 0;font-size:20px}
-    p.lead{margin:0 0 18px 0;color:var(--muted);font-size:13px}
-    .topic-list{display:flex;flex-direction:column;gap:10px}
-    .topic-btn{background:var(--glass);border:1px solid rgba(255,255,255,0.03);padding:12px;border-radius:10px;color:inherit;text-align:left;cursor:pointer;transition:transform .12s, background .12s;display:flex;gap:10px;align-items:center}
-    .topic-btn:hover{transform:translateY(-4px);background:rgba(255,255,255,0.02)}
-    .topic-btn.active{background:linear-gradient(90deg,var(--accent),#7dd3fc);color:#001018;box-shadow:0 6px 18px rgba(6,182,212,0.12)}
-    .topic-icon{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;font-weight:700}
-
-    .content{padding:28px}
-    .card{background:linear-gradient(90deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));padding:18px;border-radius:12px}
-    .title-row{display:flex;justify-content:space-between;align-items:center}
-    h2{margin:0;font-size:20px}
-    .stat-row{display:flex;gap:14px;margin-top:14px}
-    .stat{background:rgba(255,255,255,0.02);padding:10px;border-radius:10px;min-width:120px}
-    .desc{margin-top:14px;color:var(--muted);line-height:1.45}
-    .img-placeholder{margin-top:16px;border-radius:8px;overflow:hidden;height:160px;background:linear-gradient(90deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));display:flex;align-items:center;justify-content:center;color:var(--muted)}
-    .controls{display:flex;gap:12px;margin-top:18px}
-    .btn{padding:10px 14px;border-radius:10px;border:0;cursor:pointer;background:var(--accent);color:#002233;font-weight:600}
-    footer{margin-top:18px;color:var(--muted);font-size:13px}
-
-    .corner-link {position:absolute;top:10px;right:10px;background:var(--accent);color:#001018;padding:8px 12px;border-radius:8px;text-decoration:none;font-weight:600;box-shadow:0 2px 6px rgba(6,182,212,0.3);transition:background .2s, transform .2s;}
-    .corner-link:hover {background:#5eead4;transform:scale(1.05);}
-
-    @media (max-width:880px){.wrap{grid-template-columns:1fr;}.sidebar{order:2}.content{order:1}}
+    :root {
+      --bg: #020617;
+      --card: #0a0f1f;
+      --accent: #00ffe0;
+      --accent-glow: 0 0 15px rgba(0, 255, 224, 0.7);
+      --muted: #94a3b8;
+      --glass: rgba(255, 255, 255, 0.04);
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: radial-gradient(circle at 50% 20%, #031235, #000);
+      color: #e6eef6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+    }
+    .wrap {
+      width: 1100px;
+      max-width: 96%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.05));
+      border-radius: 18px;
+      box-shadow: 0 0 50px rgba(0, 255, 224, 0.15);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      position: relative;
+    }
+    .sidebar {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.06));
+      padding: 22px;
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    h1 {
+      margin: 0 0 6px 0;
+      font-size: 22px;
+      color: var(--accent);
+      text-shadow: var(--accent-glow);
+    }
+    p.lead {
+      margin: 0 0 18px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .topic-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .topic-btn {
+      background: var(--glass);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 12px;
+      border-radius: 10px;
+      color: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: transform .15s, background .15s, box-shadow .2s;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .topic-btn:hover {
+      transform: translateY(-3px);
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: var(--accent-glow);
+    }
+    .topic-btn.active {
+      background: linear-gradient(90deg, var(--accent), #0ff);
+      color: #001018;
+      box-shadow: var(--accent-glow);
+    }
+    .topic-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+    .content {
+      padding: 28px;
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.03), rgba(0, 255, 224, 0.03));
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 22px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    h2 {
+      margin: 0;
+      font-size: 20px;
+      color: var(--accent);
+      text-shadow: var(--accent-glow);
+    }
+    .stat-row {
+      display: flex;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .stat {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 10px;
+      border-radius: 10px;
+      min-width: 120px;
+      text-align: center;
+    }
+    .desc {
+      margin-top: 14px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    .img-placeholder {
+      margin-top: 16px;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 160px;
+      background: rgba(0, 255, 224, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .btn {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 0;
+      cursor: pointer;
+      background: var(--accent);
+      color: #001018;
+      font-weight: 700;
+      transition: transform .15s, box-shadow .2s;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--accent-glow);
+    }
+    .corner-link {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--accent);
+      color: #001018;
+      padding: 8px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: var(--accent-glow);
+      transition: background .2s, transform .2s;
+    }
+    .corner-link:hover {
+      background: #5eead4;
+      transform: scale(1.05);
+    }
+    @media (max-width: 880px) {
+      .wrap {grid-template-columns: 1fr;}
+      .sidebar {order: 2;}
+      .content {order: 1;}
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
     <a class="corner-link" href="https://aybusunum06.github.io" target="_blank">aybusunum06.github.io</a>
     <aside class="sidebar">
-      <h1>How AI Changed Our Lives</h1>
-      <p class="lead">Click a topic to reveal a short summary and a quick stat — perfect for your presentation.</p>
+      <h1>AI Evolution</h1>
+      <p class="lead">Click a topic to reveal quick AI insights and futuristic stats.</p>
       <div class="topic-list" id="topicList"></div>
-      <footer>Made by <strong>beşincisafa</strong></footer>
+      <footer style="margin-top:18px;color:var(--muted);font-size:13px;">Made by <strong>beşincisafa</strong></footer>
     </aside>
 
     <main class="content">
       <div class="card" id="contentCard">
         <div class="title-row">
           <h2 id="topicTitle">Welcome</h2>
-          <div id="topicTag" style="color:var(--muted);font-size:13px">Click a topic on the left</div>
+          <div id="topicTag" style="color:var(--muted);font-size:13px">Select a topic</div>
         </div>
-        <div class="desc" id="topicDesc">This interactive page is designed for your AI presentation. Use the buttons to show each topic quickly — each topic has a 1-2 sentence summary and a notable stat.</div>
-
+        <div class="desc" id="topicDesc">This interactive interface presents the major changes AI brought to our world in the past decade. Explore each area to see its impact.</div>
         <div class="stat-row" id="statRow"></div>
-        <div class="img-placeholder" id="imgPlaceholder">Topic image</div>
-
+        <div class="img-placeholder" id="imgPlaceholder">Topic visual</div>
         <div class="controls">
-          <button class="btn" id="prevBtn">Previous</button>
-          <button class="btn" id="nextBtn">Next</button>
-          <button class="btn" id="presentBtn">Start Presentation</button>
+          <button class="btn" id="prevBtn">◀ Previous</button>
+          <button class="btn" id="nextBtn">Next ▶</button>
         </div>
-      </div>
-    </main>
-  </div>
-
-  <script>
-    const TOPICS = [
-      {id:'what', title:'What is AI?', tag:'Definition', desc:'AI means machines that can learn and make decisions. It includes algorithms, models, and data-driven systems.', stats:[{k:'Growth', v:'>10x in 10 years'},{k:'Usage', v:'In billions of devices'}]},
-      {id:'comm', title:'Communication', tag:'Everyday', desc:'Chatbots and translators let people talk across languages and get fast help.', stats:[{k:'Messages/day', v:'Trillions'},{k:'Assistants', v:'Hundreds of millions'}]},
-      {id:'daily', title:'Daily Life', tag:'Home & Media', desc:'Smartphones, recommendations, and smart homes shape our daily choices and convenience.', stats:[{k:'Recommendations', v:'~35% of viewed content'},{k:'Smart homes', v:'Rapid adoption'}]},
-      {id:'transport', title:'Transportation', tag:'Mobility', desc:'AI optimizes routes and powers autonomous driving research, improving safety and efficiency.', stats:[{k:'Accidents reduced', v:'Potentially significant'},{k:'Self-driving', v:'Testing worldwide'}]},
-      {id:'health', title:'Healthcare', tag:'Medicine', desc:'AI helps detect diseases earlier and supports medical decisions with data analysis.', stats:[{k:'Early detection', v:'Improved accuracy'},{k:'Clinical tools', v:'Increasing'}]},
-      {id:'work', title:'Work & Economy', tag:'Jobs', desc:'Automation removes repetitive tasks while creating new tech roles and tools for productivity.', stats:[{k:'Job shift', v:'Many roles evolving'},{k:'New jobs', v:'AI specialist demand'}]},
-      {id:'edu', title:'Education', tag:'Learning', desc:'Personalized learning platforms adapt to students’ needs and speed up progress.', stats:[{k:'Adaptive learning', v:'More effective'},{k:'Tutors', v:'AI-assisted'}]},
-      {id:'art', title:'Art & Creativity', tag:'Creative', desc:'AI generates music, art, and writing — enabling new forms of collaboration.', stats:[{k:'Creative tools', v:'Widely used'},{k:'Co-creation', v:'Growing interest'}]},
-      {id:'privacy', title:'Privacy & Ethics', tag:'Challenges', desc:'AI raises concerns about data privacy, bias, and misinformation that need rules.', stats:[{k:'Concerns', v:'High priority'},{k:'Regulation', v:'Developing'}]},
-      {id:'safety', title:'Safety & Security', tag:'Risk', desc:'AI is used for cybersecurity and also creates new threat vectors requiring vigilance.', stats:[{k:'Cyber threats', v:'Evolving'},{k:'Defense', v:'AI-powered'}]},
-      {id:'future', title:'The Future', tag:'Outlook', desc:'AI will become more integrated — the key is ethical design and human control.', stats:[{k:'Integration', v:'Wider'},{k:'Responsibility', v:'Essential'}]}
-    ];
-
-    const topicList = document.getElementById('topicList');
-    const topicTitle = document.getElementById('topicTitle');
-    const topicDesc = document.getElementById('topicDesc');
-    const statRow = document.getElementById('statRow');
-    const imgPlaceholder = document.getElementById('imgPlaceholder');
-    let current = 0;
-
-    function renderTopicButtons(){
-      TOPICS.forEach((t,i)=>{
-        const btn = document.createElement('button');
-        btn.className='topic-btn'+(i===0? ' active':'');
-        btn.innerHTML = `<div class="topic-icon">${i+1}</div><div style="flex:1"><strong>${t.title}</strong><div style="font-size:12px;color:var(--muted)">${t.tag}</div></div>`;
-        btn.onclick = ()=>{ selectTopic(i); document.querySelectorAll('.topic-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
-        topicList.appendChild(btn);
-      })
-    }
-
-    function selectTopic(i){
-      current = i;
-      const t = TOPICS[i];
-      topicTitle.textContent = t.title;
-      topicDesc.textContent = t.desc;
-      statRow.innerHTML = '';
-      t.stats.forEach(s=>{
-        const el = document.createElement('div'); el.className='stat'; el.innerHTML=`<div style="font-size:13px;color:var(--muted)">${s.k}</div><div style="font-weight:700;margin-top:6px">${s.v}</div>`; statRow.appendChild(el);
-      })
-      imgPlaceholder.textContent = t.tag + ' — visual';
-    }
-
-    document.getElementById('prevBtn').onclick = ()=>{ selectTopic((current-1+TOPICS.length)%TOPICS.length); highlightButton(current); }
-    document.getElementById('nextBtn').onclick = ()=>{ selectTopic((current+1)%TOPICS.length); highlightButton(current); }
-    document.getElementById('presentBtn').onclick = ()=>{ startAutoPresent(); }
-
-    function highlightButton(i){ const btns = document.querySelectorAll('.topic-btn'); btns.forEach(b=>b.classList.remove('active')); if(btns[i]) btns[i].classList.add('active'); }
-
-    let autoTimer = null;
-    function startAutoPresent(){
-      if(autoTimer){ clearInterval(autoTimer); autoTimer = null; document.getElementById('presentBtn').textContent='Start Presentation'; return; }
-      selectTopic(0); highlightButton(0);
-      document.getElementById('presentBtn').textContent='Stop Presentation';
-      autoTimer = setInterval(()=>{ selectTopic((current+1)%TOPICS.length); highlightButton(current); }, 20000);
-    }
-
-    renderTopicButtons(); selectTopic(0);
-  </script>
-</body>
-</html>
