@@ -1,199 +1,332 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI in the Last Decade</title>
-<style>
-  body {
-    margin: 0;
-    background: radial-gradient(circle at center, #0b0b0b, #000);
-    color: #eaf6f5;
-    font-family: 'Poppins', sans-serif;
-    overflow: hidden;
-  }
-  header {
-    text-align: center;
-    padding: 20px;
-    font-size: 2rem;
-    color: cyan;
-    text-shadow: 0 0 10px cyan;
-  }
-  .topic-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 75vh;
-    text-align: center;
-    transition: all 0.6s ease;
-  }
-  h2 {
-    font-size: 1.8rem;
-    color: #00ffff;
-    text-shadow: 0 0 10px #00ffff;
-  }
-  p {
-    width: 60%;
-    font-size: 1rem;
-  }
-  .chart {
-    width: 400px;
-    height: 250px;
-    margin-top: 20px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  canvas {
-    width: 100%;
-    height: 100%;
-  }
-  .controls {
-    text-align: center;
-    margin: 15px;
-  }
-  button {
-    background: none;
-    border: 2px solid cyan;
-    color: cyan;
-    padding: 10px 20px;
-    margin: 0 10px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: all 0.3s;
-  }
-  button:hover {
-    background: cyan;
-    color: black;
-  }
-</style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI Evolution — beşincisafa</title>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root{
+      --bg:#010114;
+      --muted:#9aa7b5;
+      --accent: #00ffe0;
+      --card: rgba(255,255,255,0.02);
+      --ui-font: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:var(--ui-font);background:var(--bg);color:#eaf6f5}
+    /* background canvas (neural net) */
+    #bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+    /* main container */
+    .wrap{position:relative;z-index:1;max-width:1100px;margin:28px auto;border-radius:14px;overflow:hidden;display:grid;grid-template-columns:320px 1fr;gap:0;backdrop-filter:blur(6px)}
+    aside{padding:22px;background:linear-gradient(180deg, rgba(0,0,0,0.35), rgba(2,8,20,0.55));border-right:1px solid rgba(255,255,255,0.03)}
+    h1{margin:0;font-size:20px;color:transparent;background:linear-gradient(90deg,var(--accent),#5eead4);-webkit-background-clip:text}
+    p.lead{margin:8px 0 18px;color:var(--muted);font-size:13px}
+    .topic-list{display:flex;flex-direction:column;gap:10px;max-height:70vh;overflow:auto;padding-right:6px}
+    .topic-btn{display:flex;gap:10px;align-items:center;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));cursor:pointer;transition:transform .12s, box-shadow .12s}
+    .topic-btn:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,255,224,0.06)}
+    .topic-btn.active{box-shadow:0 10px 30px rgba(0,255,224,0.15);background:linear-gradient(90deg, rgba(0,255,224,0.08), rgba(94,234,212,0.06))}
+    .topic-icon{width:36px;height:36px;border-radius:8px;background:rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;font-weight:700;color:#cff}
+
+    main{padding:28px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.05))}
+    .card{padding:18px;border-radius:12px;background:var(--card);border:1px solid rgba(255,255,255,0.03)}
+    .title-row{display:flex;justify-content:space-between;align-items:center}
+    h2{margin:0;font-size:20px;color:transparent;background:linear-gradient(90deg,var(--accent),#7af1da);-webkit-background-clip:text}
+    .desc{margin-top:12px;color:var(--muted);line-height:1.45}
+    .chart-wrap{margin-top:16px;height:300px;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:12px;background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.40));border:1px solid rgba(255,255,255,0.03)}
+    canvas#chartCanvas{max-width:100%;max-height:100%}
+    .controls{display:flex;gap:12px;margin-top:16px}
+    .btn{padding:10px 14px;border-radius:10px;border:0;cursor:pointer;background:transparent;color:#bafbe8;font-weight:700;border:1px solid rgba(0,255,224,0.12)}
+    .corner-link{position:absolute;top:12px;right:12px;padding:8px 10px;border-radius:8px;background:linear-gradient(90deg,var(--accent),#5eead4);color:#001018;font-weight:700;text-decoration:none;z-index:3}
+    @media (max-width:920px){.wrap{grid-template-columns:1fr}.topic-list{flex-direction:row;overflow:auto;padding:12px}.topic-btn{flex:0 0 auto}}
+  </style>
 </head>
 <body>
-<header>AI’s Impact in the Last Decade</header>
+  <canvas id="bgCanvas"></canvas>
 
-<div class="topic-container">
-  <h2 id="title"></h2>
-  <p id="desc"></p>
-  <div class="chart"><canvas id="chartCanvas"></canvas></div>
-</div>
+  <div class="wrap">
+    <a class="corner-link" href="https://aybusunum06.github.io" target="_blank">aybusunum06.github.io</a>
 
-<div class="controls">
-  <button onclick="prevTopic()">Previous</button>
-  <button onclick="nextTopic()">Next</button>
-</div>
+    <aside>
+      <h1>AI Evolution</h1>
+      <p class="lead">Click a topic to reveal charts and key percentages.</p>
+      <div class="topic-list" id="topicList"></div>
+      <footer style="margin-top:18px;color:var(--muted);font-size:13px">Made by <strong>beşincisafa</strong></footer>
+    </aside>
 
-<script>
-const topics = [
-  {
-    title: "Healthcare",
-    desc: "AI improved medical diagnostics, helping doctors detect diseases faster and more accurately.",
-    chartType: "bar",
-    stats: [
-      { label: "Diagnosis Accuracy", percent: 92 },
-      { label: "Efficiency", percent: 80 },
-      { label: "Patient Trust", percent: 70 }
-    ]
-  },
-  {
-    title: "Transportation",
-    desc: "Autonomous vehicles reduced accidents and improved fuel efficiency.",
-    chartType: "line",
-    stats: [
-      { label: "Accident Reduction", percent: 45 },
-      { label: "Efficiency", percent: 60 },
-      { label: "Adoption Rate", percent: 30 }
-    ]
-  },
-  {
-    title: "Education",
-    desc: "AI personalized learning experiences for students through adaptive platforms.",
-    chartType: "pie",
-    stats: [
-      { label: "Student Engagement", percent: 75 },
-      { label: "Personalization", percent: 65 },
-      { label: "AI Integration", percent: 55 }
-    ]
-  },
-  {
-    title: "Economy & Work",
-    desc: "Automation reshaped jobs, increasing productivity but raising concerns about employment.",
-    chartType: "radar",
-    stats: [
-      { label: "Productivity", percent: 85 },
-      { label: "Automation", percent: 70 },
-      { label: "Job Shift", percent: 50 }
-    ]
-  },
-  {
-    title: "Social Media & Daily Life",
-    desc: "AI shaped online content, recommendations, and personal assistants like Siri and Alexa.",
-    chartType: "doughnut",
-    stats: [
-      { label: "AI Usage", percent: 90 },
-      { label: "Privacy Awareness", percent: 40 },
-      { label: "Time Saved", percent: 60 }
-    ]
-  }
-];
+    <main>
+      <div class="card">
+        <div class="title-row">
+          <h2 id="topicTitle">Welcome</h2>
+          <div id="topicTag" style="color:var(--muted);font-size:13px">Select a topic</div>
+        </div>
+        <div class="desc" id="topicDesc">This interactive page shows the most important AI impacts — charts update per topic.</div>
 
-let current = 0;
-let chart;
+        <div class="chart-wrap">
+          <canvas id="chartCanvas" width="800" height="360"></canvas>
+        </div>
 
-function showTopic() {
-  const t = topics[current];
-  document.getElementById("title").innerText = t.title;
-  document.getElementById("desc").innerText = t.desc;
+        <div class="controls">
+          <button class="btn" id="prevBtn">◀ Previous</button>
+          <button class="btn" id="nextBtn">Next ▶</button>
+        </div>
+      </div>
+    </main>
+  </div>
 
-  const ctx = document.getElementById("chartCanvas").getContext("2d");
-  if (chart) chart.destroy();
-
-  const labels = t.stats.map(s => s.label);
-  const data = t.stats.map(s => s.percent);
-
-  const colors = ['#00ffff','#00ff80','#80ff00','#ff8000','#ff00ff'];
-
-  chart = new Chart(ctx, {
-    type: t.chartType,
-    data: {
-      labels,
-      datasets: [{
-        label: 'AI Progress (%)',
-        data,
-        backgroundColor: colors.slice(0, data.length),
-        borderColor: 'cyan',
-        borderWidth: 2,
-        fill: t.chartType === "line" ? false : true,
-        tension: 0.4
-      }]
-    },
-    options: {
-      scales: { 
-        y: { beginAtZero: true, ticks: { color: '#00ffff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
-        x: { ticks: { color: '#00ffff' }, grid: { color: 'rgba(255,255,255,0.1)' } }
-      },
-      plugins: {
-        legend: { labels: { color: 'white' } }
+  <script>
+  /* ----------------- Neural network background ----------------- */
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, nodes = [];
+  function resizeBG(){
+    W = canvas.width = innerWidth;
+    H = canvas.height = innerHeight;
+    nodes = [];
+    const cols = Math.max(6, Math.floor(W/140));
+    const rows = Math.max(4, Math.floor(H/140));
+    for(let y=0;y<rows;y++){
+      for(let x=0;x<cols;x++){
+        nodes.push({
+          x: (x+0.5)*(W/cols) + (Math.random()-0.5)*40,
+          y: (y+0.5)*(H/rows) + (Math.random()-0.5)*40,
+          vx: (Math.random()-0.5)*0.25,
+          vy: (Math.random()-0.5)*0.25,
+          r: 1.8 + Math.random()*2.2
+        });
       }
     }
+  }
+  let hue = 170;
+  function drawBG(){
+    ctx.clearRect(0,0,W,H);
+    for(const n of nodes){
+      n.x += n.vx; n.y += n.vy;
+      if(n.x < 0 || n.x > W) n.vx *= -1;
+      if(n.y < 0 || n.y > H) n.vy *= -1;
+    }
+    // connections
+    for(let i=0;i<nodes.length;i++){
+      for(let j=i+1;j<i+6 && j<nodes.length;j++){
+        const a = nodes[i], b = nodes[j];
+        const dx = a.x - b.x, dy = a.y - b.y;
+        const d = Math.hypot(dx,dy);
+        if(d < 220){
+          const alpha = 0.12 * (1 - d/220);
+          ctx.strokeStyle = `hsla(${hue}, 90%, 55%, ${alpha})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+        }
+      }
+    }
+    // nodes
+    for(const n of nodes){
+      ctx.beginPath();
+      ctx.fillStyle = `hsla(${hue},90%,60%,0.95)`;
+      ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fill();
+    }
+  }
+  function loopBG(){ drawBG(); requestAnimationFrame(loopBG); }
+  addEventListener('resize', ()=>{ resizeBG(); });
+  resizeBG(); loopBG();
+
+  /* ----------------- Topic data (with correct stats) ----------------- */
+  const TOPICS = [
+    {
+      id:'health',
+      title:'Healthcare',
+      tag:'Medicine',
+      desc:'AI improved diagnostics and treatment personalization.',
+      chartType:'bar',
+      stats:[
+        {label:'Diagnosis Accuracy', value:92},
+        {label:'Workflow Efficiency', value:80},
+        {label:'Clinical Tools Adoption', value:68}
+      ],
+      color: 170
+    },
+    {
+      id:'comm',
+      title:'Communication',
+      tag:'Everyday',
+      desc:'Chatbots, translators and voice assistants transformed interaction.',
+      chartType:'line',
+      stats:[
+        {label:'Users (B)', value:1},
+        {label:'Supported Languages', value:100},
+        {label:'Realtime Translation', value:65}
+      ],
+      color: 200
+    },
+    {
+      id:'education',
+      title:'Education',
+      tag:'Learning',
+      desc:'Adaptive platforms personalize learning per student.',
+      chartType:'radar',
+      stats:[
+        {label:'Engagement', value:75},
+        {label:'Personalization', value:68},
+        {label:'Completion Rate', value:58}
+      ],
+      color: 210
+    },
+    {
+      id:'transport',
+      title:'Transportation',
+      tag:'Mobility',
+      desc:'Autonomous systems improve safety and route efficiency.',
+      chartType:'pie',
+      stats:[
+        {label:'Accident Reduction', value:30},
+        {label:'Routing Efficiency', value:25},
+        {label:'EV Integration', value:40}
+      ],
+      color: 150
+    },
+    {
+      id:'work',
+      title:'Work & Economy',
+      tag:'Jobs',
+      desc:'Automation reshaped tasks; new AI roles emerged.',
+      chartType:'doughnut',
+      stats:[
+        {label:'Productivity', value:85},
+        {label:'AI Job Growth', value:50},
+        {label:'Routine Task Automation', value:60}
+      ],
+      color: 180
+    },
+    {
+      id:'ethics',
+      title:'Privacy & Ethics',
+      tag:'Challenge',
+      desc:'Bias, privacy and regulation became central topics.',
+      chartType:'scatter',
+      stats:[
+        {label:'Public Concern', value:72},
+        {label:'Regulatory Activity', value:45},
+        {label:'Transparency Tools', value:38}
+      ],
+      color: 280
+    },
+    {
+      id:'future',
+      title:'Future Vision',
+      tag:'Next Decade',
+      desc:'AI will integrate widely — ethics and control matter most.',
+      chartType:'bar',
+      stats:[
+        {label:'Integration', value:78},
+        {label:'Ethics Focus', value:66},
+        {label:'Human-AI Collaboration', value:82}
+      ],
+      color: 170
+    }
+  ];
+
+  /* ----------------- Build UI & Chart ----------------- */
+  const topicList = document.getElementById('topicList');
+  const topicTitle = document.getElementById('topicTitle');
+  const topicDesc = document.getElementById('topicDesc');
+  const chartCanvas = document.getElementById('chartCanvas').getContext('2d');
+  let activeChart = null;
+  let current = 0;
+
+  function buildTopicButtons(){
+    TOPICS.forEach((t, i)=>{
+      const btn = document.createElement('button');
+      btn.className = 'topic-btn' + (i===0 ? ' active' : '');
+      btn.innerHTML = `<div class="topic-icon">${i+1}</div><div style="flex:1;text-align:left"><strong style="display:block">${t.title}</strong><span style="font-size:12px;color:var(--muted)">${t.tag}</span></div>`;
+      btn.onclick = ()=>{ goTo(i); };
+      topicList.appendChild(btn);
+    });
+  }
+
+  function goTo(i){
+    current = i;
+    document.querySelectorAll('.topic-btn').forEach((b, idx)=> b.classList.toggle('active', idx===i));
+    renderTopic(TOPICS[i]);
+  }
+
+  function renderTopic(topic){
+    topicTitle.textContent = topic.title;
+    topicDesc.textContent = topic.desc;
+    hue = topic.color || 170;
+
+    // prepare data
+    const labels = topic.stats.map(s => s.label);
+    const values = topic.stats.map(s => s.value);
+
+    // destroy previous chart
+    if(activeChart){ try{ activeChart.destroy(); }catch(e){ /* ignore */ } activeChart = null; }
+
+    // Chart configuration per type
+    const commonOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#eaf6f5' } },
+        tooltip: { enabled: true }
+      },
+      scales: {
+        x: { ticks: { color: '#00ffe0' }, grid: { color: 'rgba(255,255,255,0.04)' } },
+        y: { ticks: { color: '#00ffe0' }, grid: { color: 'rgba(255,255,255,0.04)' }, beginAtZero: true }
+      }
+    };
+
+    const cfg = {
+      type: topic.chartType,
+      data: {
+        labels,
+        datasets: [{
+          label: topic.title,
+          data: values,
+          backgroundColor: values.map((v, idx)=>`hsla(${topic.color},90%,60%,${0.9 - idx*0.12})`),
+          borderColor: 'rgba(0,255,224,0.9)',
+          borderWidth: 2,
+          fill: topic.chartType === 'line' ? false : true,
+          tension: 0.3,
+          pointRadius: 4
+        }]
+      },
+      options: JSON.parse(JSON.stringify(commonOptions)) // clone
+    };
+
+    // adapt options for special charts
+    if(topic.chartType === 'radar'){
+      cfg.options.scales = undefined;
+      cfg.options.elements = { line: { borderWidth: 2 } };
+    }
+    if(topic.chartType === 'scatter'){
+      // generate x/y scatter points from values for demo
+      cfg.data.datasets[0].data = topic.stats.map((s, idx)=>({x: idx+1, y: s.value}));
+      cfg.options.scales.x = { ticks: { color:'#00ffe0' }, grid: { color: 'rgba(255,255,255,0.04)' }, beginAtZero: true };
+      cfg.options.scales.y = { ticks: { color:'#00ffe0' }, grid: { color: 'rgba(255,255,255,0.04)' }, beginAtZero: true };
+    }
+    if(topic.chartType === 'pie' || topic.chartType === 'doughnut'){
+      cfg.options.scales = {};
+      cfg.options.plugins.legend = { position: 'right', labels: { color: '#eaf6f5' } };
+    }
+    // create chart
+    activeChart = new Chart(document.getElementById('chartCanvas'), cfg);
+  }
+
+  // navigation buttons
+  document.getElementById('prevBtn').addEventListener('click', ()=> goTo((current-1+TOPICS.length)%TOPICS.length));
+  document.getElementById('nextBtn').addEventListener('click', ()=> goTo((current+1)%TOPICS.length));
+
+  // initialize
+  buildTopicButtons();
+  goTo(0);
+
+  // helpful debug: show console errors in page (optional - you can comment this out)
+  window.addEventListener('error', (e)=> {
+    console.error('Page error:', e.message, e.filename+':'+e.lineno);
   });
-}
-
-function nextTopic() {
-  current = (current + 1) % topics.length;
-  showTopic();
-}
-
-function prevTopic() {
-  current = (current - 1 + topics.length) % topics.length;
-  showTopic();
-}
-
-showTopic();
-</script>
+  </script>
 </body>
 </html>
