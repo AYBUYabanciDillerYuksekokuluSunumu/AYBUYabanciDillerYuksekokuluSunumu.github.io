@@ -5,94 +5,98 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>AI — Final Presentation (beşincisafa)</title>
 
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
   <style>
     :root{
       --fg: #eaf6f5;
       --muted: #9aa7b5;
-      --accent: #00ffe0;
-      --card-bg: rgba(0,0,0,0.35);
+      --accent: #00c9a7;
+      --card-bg: rgba(10,12,18,0.7);
       --glass: rgba(255,255,255,0.03);
       --ui-font: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
     }
     *{box-sizing:border-box}
     html,body{height:100%;margin:0;font-family:var(--ui-font);color:var(--fg);background:#000;overflow:hidden}
-    /* background neural canvas */
-    #bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;filter:blur(6px) contrast(1.05);}
+    /* background neural canvas (neon brain) */
+    #bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;filter:contrast(1.05) blur(2px)}
     /* main layout */
-    .wrap{position:relative;z-index:1;max-width:1200px;margin:32px auto;border-radius:16px;overflow:hidden;display:grid;grid-template-columns:340px 1fr;backdrop-filter:blur(4px)}
-    aside{padding:26px;background:linear-gradient(180deg, rgba(0,0,0,0.4), rgba(2,8,20,0.6));border-right:1px solid rgba(255,255,255,0.03)}
-    h1{margin:0;font-size:22px;background:linear-gradient(90deg,var(--accent),#5eead4);-webkit-background-clip:text;color:transparent}
+    .wrap{position:relative;z-index:1;max-width:1200px;margin:32px auto;border-radius:14px;overflow:hidden;display:grid;grid-template-columns:320px 1fr;backdrop-filter:blur(4px)}
+    aside{padding:22px;background:linear-gradient(180deg, rgba(4,6,10,0.75), rgba(8,12,20,0.85));border-right:1px solid rgba(255,255,255,0.03)}
+    h1{margin:0;font-size:20px;background:linear-gradient(90deg,var(--accent),#7ef0d0);-webkit-background-clip:text;color:transparent}
     p.lead{margin:8px 0 18px;color:var(--muted);font-size:13px}
     .topic-list{display:flex;flex-direction:column;gap:10px;max-height:72vh;overflow:auto;padding-right:6px}
     .topic-btn{display:flex;gap:10px;align-items:center;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));cursor:pointer;transition:transform .12s, box-shadow .12s}
-    .topic-btn:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,255,224,0.06)}
-    .topic-btn.active{box-shadow:0 12px 36px rgba(0,255,224,0.15);background:linear-gradient(90deg, rgba(0,255,224,0.08), rgba(94,234,212,0.06))}
+    .topic-btn:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,200,167,0.06)}
+    .topic-btn.active{box-shadow:0 14px 40px rgba(0,200,167,0.15);background:linear-gradient(90deg, rgba(0,200,167,0.08), rgba(126,240,208,0.06))}
     .topic-icon{width:36px;height:36px;border-radius:8px;background:rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;font-weight:700;color:#cff}
 
-    main{padding:28px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.06))}
-    .card{padding:18px;border-radius:14px;background:var(--card-bg);border:1px solid rgba(255,255,255,0.03);min-height:520px;position:relative;overflow:hidden}
-    .title-row{display:flex;justify-content:space-between;align-items:center}
+    main{padding:20px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.06))}
+    .card{padding:18px;border-radius:12px;background:var(--card-bg);border:1px solid rgba(255,255,255,0.03);min-height:520px;position:relative;overflow:hidden}
+    .title-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
     h2{margin:0;font-size:22px;color:transparent;background:linear-gradient(90deg,var(--accent),#7af1da);-webkit-background-clip:text}
-    .desc{margin-top:12px;color:var(--muted);line-height:1.6;font-size:15px}
-    .source-note{margin-top:10px;color:rgba(155,170,181,0.9);font-size:13px;font-style:italic}
-    .chart-wrap{margin-top:18px;height:320px;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:14px;background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.44));border:1px solid rgba(255,255,255,0.03)}
-    canvas#chartCanvas{max-width:100%;max-height:100%}
+    .desc{margin-top:10px;color:var(--muted);line-height:1.6;font-size:15px;max-width:920px}
+    .source-note{margin-top:10px;color:rgba(170,180,190,0.9);font-size:13px;font-style:italic}
+    .chart-wrap{margin-top:18px;height:320px;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:14px;background:linear-gradient(180deg, rgba(0,0,0,0.22), rgba(0,0,0,0.42));border:1px solid rgba(255,255,255,0.03)}
+    canvas.chartCanvas{max-width:100%;max-height:100%;display:block}
 
-    .controls{display:flex;gap:12px;margin-top:18px}
-    .btn{padding:10px 14px;border-radius:10px;border:0;cursor:pointer;background:transparent;color:#bafbe8;font-weight:800;border:1px solid rgba(0,255,224,0.12)}
+    .controls{display:flex;gap:12px;margin-top:16px}
+    .btn{padding:10px 14px;border-radius:10px;border:0;cursor:pointer;background:transparent;color:#bafbe8;font-weight:800;border:1px solid rgba(0,200,167,0.12)}
     .corner-link{position:absolute;top:12px;right:12px;padding:8px 10px;border-radius:8px;background:linear-gradient(90deg,var(--accent),#5eead4);color:#001018;font-weight:700;text-decoration:none;z-index:3}
 
     /* slide / fade animations */
     .slide-container{position:relative;height:100%}
-    .slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:20px;transition:transform .6s cubic-bezier(.2,.9,.2,1),opacity .45s ease;will-change:transform,opacity}
+    .slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:20px;transition:transform .54s cubic-bezier(.2,.9,.2,1),opacity .42s ease;will-change:transform,opacity}
     .enter {opacity:0; transform: translateY(18px); }
-    .enter-active {opacity:1; transform: translateY(0); transition: transform .6s cubic-bezier(.2,.9,.2,1), opacity .45s ease;}
+    .enter-active {opacity:1; transform: translateY(0); transition: transform .54s cubic-bezier(.2,.9,.2,1), opacity .42s ease;}
     .exit {opacity:1; transform: translateY(0); }
-    .exit-active {opacity:0; transform: translateY(-24px); transition: transform .4s cubic-bezier(.2,.9,.2,1), opacity .35s ease;}
+    .exit-active {opacity:0; transform: translateY(-24px); transition: transform .34s cubic-bezier(.2,.9,.2,1), opacity .33s ease;}
 
     /* responsive */
-    @media (max-width:980px){ .wrap{grid-template-columns:1fr} .topic-list{flex-direction:row;overflow:auto;padding:12px}.topic-btn{flex:0 0 auto} .card{min-height:420px} }
+    @media (max-width:980px){
+      .wrap{grid-template-columns:1fr}
+      .topic-list{flex-direction:row;overflow:auto;padding:12px}
+      .topic-btn{flex:0 0 auto}
+      .card{min-height:420px}
+    }
   </style>
 </head>
 <body>
 
-  <canvas id="bgCanvas"></canvas>
+  <canvas id="bgCanvas" aria-hidden="true"></canvas>
 
-  <div class="wrap">
-    <a class="corner-link" href="https://aybusunum06.github.io" target="_blank">aybusunum06.github.io</a>
+  <div class="wrap" role="application">
+    <a class="corner-link" href="https://aybusunum06.github.io" target="_blank" rel="noopener">aybusunum06.github.io</a>
 
     <aside>
       <h1>AI Evolution</h1>
-      <p class="lead">Click topics — watch neon charts and slick transitions. Impress the class.</p>
-      <div class="topic-list" id="topicList"></div>
+      <p class="lead">Click a topic — modern charts, neon background, professional look. Use arrows or buttons to move.</p>
+      <div class="topic-list" id="topicList" role="navigation" aria-label="Topics"></div>
       <footer style="margin-top:18px;color:var(--muted);font-size:13px">Made by <strong>beşincisafa</strong></footer>
     </aside>
 
     <main>
-      <div class="card">
+      <div class="card" role="region" aria-live="polite">
         <div class="title-row">
           <h2 id="topicTitle">Welcome</h2>
           <div id="topicTag" style="color:var(--muted);font-size:13px">Select a topic</div>
         </div>
 
-        <!-- slide container holds the animated content -->
         <div class="slide-container" id="slideContainer" aria-live="polite">
           <!-- slides injected here -->
         </div>
 
-        <div class="controls">
-          <button class="btn" id="prevBtn">◀ Previous</button>
-          <button class="btn" id="nextBtn">Next ▶</button>
+        <div class="controls" aria-hidden="false">
+          <button class="btn" id="prevBtn" aria-label="Previous slide">◀ Previous</button>
+          <button class="btn" id="nextBtn" aria-label="Next slide">Next ▶</button>
         </div>
       </div>
     </main>
   </div>
 
 <script>
-/* ---------------- BACKGROUND: neural network canvas (neon brain) ---------------- */
+/* ----------------- Neon neural background (performance-friendly) ----------------- */
 const bg = document.getElementById('bgCanvas');
 const bctx = bg.getContext('2d');
 let W = innerWidth, H = innerHeight;
@@ -109,15 +113,16 @@ function resizeBG(){
       nodes.push({
         x: (x+0.5)*(W/cols) + (Math.random()-0.5)*40,
         y: (y+0.5)*(H/rows) + (Math.random()-0.5)*40,
-        vx: (Math.random()-0.5)*0.2,
-        vy: (Math.random()-0.5)*0.2,
-        r: 1.6 + Math.random()*2.4
+        vx: (Math.random()-0.5)*0.18,
+        vy: (Math.random()-0.5)*0.18,
+        r: 1.4 + Math.random()*2.0
       });
     }
   }
 }
 function drawBG(){
   bctx.clearRect(0,0,W,H);
+  // gentle background glow
   for(const n of nodes){
     n.x += n.vx; n.y += n.vy;
     if(n.x<0||n.x>W) n.vx*=-1;
@@ -127,10 +132,10 @@ function drawBG(){
   for(let i=0;i<nodes.length;i++){
     for(let j=i+1;j<i+6 && j<nodes.length;j++){
       const a = nodes[i], b = nodes[j];
-      const dx = a.x - b.x, dy = a.y - b.y;
+      const dx = a.x-b.x, dy = a.y-b.y;
       const d = Math.hypot(dx,dy);
       if(d < 220){
-        const alpha = 0.13 * (1 - d/220);
+        const alpha = 0.12 * (1 - d/220);
         bctx.strokeStyle = `hsla(${hue},90%,55%,${alpha})`;
         bctx.lineWidth = 1;
         bctx.beginPath(); bctx.moveTo(a.x,a.y); bctx.lineTo(b.x,b.y); bctx.stroke();
@@ -143,16 +148,16 @@ function drawBG(){
     bctx.fillStyle = `hsla(${hue},90%,60%,0.95)`;
     bctx.arc(n.x,n.y,n.r,0,Math.PI*2); bctx.fill();
   }
-  // subtle vignette
+  // subtle vignette for depth
   const g = bctx.createLinearGradient(0,0,0,H);
-  g.addColorStop(0,'rgba(0,0,0,0.0)'); g.addColorStop(1,'rgba(0,0,0,0.2)');
+  g.addColorStop(0,'rgba(0,0,0,0.0)'); g.addColorStop(1,'rgba(0,0,0,0.25)');
   bctx.fillStyle = g; bctx.fillRect(0,0,W,H);
 }
 function animBG(){ drawBG(); requestAnimationFrame(animBG); }
 addEventListener('resize', ()=> resizeBG());
 resizeBG(); animBG();
 
-/* ---------------- TOPICS (10) with longer but simple text and per-topic color + sources ---------------- */
+/* ----------------- Topics data (10) with sources ----------------- */
 const TOPICS = [
   { id:'health', title:'1. Healthcare', tag:'Medicine', desc: 'AI helps doctors detect illnesses earlier and supports precise treatments. From imaging to patient monitoring, it speeds decisions and saves lives.', chartType:'bar', stats:[{label:'Accuracy',value:93},{label:'Speed',value:85},{label:'Adoption',value:75}], color:170, source:'Data from WHO & AI in Healthcare reports (2024)' },
   { id:'transport', title:'2. Transportation', tag:'Mobility', desc: 'Smart driving systems, route optimization and predictive maintenance reduced delays and made travel safer and greener.', chartType:'line', stats:[{label:'Safety',value:78},{label:'Efficiency',value:68},{label:'Adoption',value:55}], color:200, source:'Industry studies & transport AI surveys (2023–2024)' },
@@ -166,10 +171,9 @@ const TOPICS = [
   { id:'future', title:'10. The Future', tag:'Outlook', desc: 'AI will keep growing — it can help climate, medicine and exploration if we guide it with strong ethics and rules.', chartType:'pie', stats:[{label:'Innovation',value:95},{label:'Ethics Focus',value:72},{label:'Trust',value:60}], color:170, source:'Global AI outlooks (2024)' }
 ];
 
-/* ---------- Build UI: topic buttons and initial slide ---------- */
+/* ----------------- Build UI and slide system (fixed canvas selection) ----------------- */
 const topicListEl = document.getElementById('topicList');
 const slideContainer = document.getElementById('slideContainer');
-const titleEl = document.getElementById('topicTitle');
 
 let current = 0;
 let activeChart = null;
@@ -184,108 +188,103 @@ function buildButtons(){
   });
 }
 
-/* ---------- Animated slide replacement (fade + slide) ---------- */
+/* create slide element; canvas uses class (no duplicate IDs) */
 function createSlideElement(topic){
   const slide = document.createElement('div');
   slide.className = 'slide enter';
-  // inner content: title, text, chart canvas
   const inner = document.createElement('div');
   inner.style.width = '100%';
-  inner.style.maxWidth = '780px';
+  inner.style.maxWidth = '820px';
   inner.style.display = 'flex';
   inner.style.flexDirection = 'column';
   inner.style.alignItems = 'center';
   inner.style.gap = '12px';
 
-  const h = document.createElement('h2');
-  h.textContent = topic.title;
-  h.style.marginTop = '10px';
-  const p = document.createElement('p');
-  p.textContent = topic.desc;
-  p.style.color = 'var(--muted)';
-  p.style.maxWidth = '820px';
+  const h = document.createElement('h2'); h.textContent = topic.title; h.style.marginTop='10px';
+  const p = document.createElement('p'); p.textContent = topic.desc; p.style.color = 'var(--muted)'; p.style.maxWidth='820px';
 
-  // source note (small)
-  const s = document.createElement('div');
-  s.className = 'source-note';
-  s.textContent = topic.source ? topic.source : 'Based on global AI studies (2024)';
+  const s = document.createElement('div'); s.className = 'source-note'; s.textContent = topic.source ? topic.source : 'Based on global AI studies (2024)';
 
-  const chartWrap = document.createElement('div');
-  chartWrap.className = 'chart-wrap';
-  chartWrap.style.width = '100%';
-  chartWrap.style.maxWidth = '820px';
-  const c = document.createElement('canvas');
-  c.id = 'chartCanvas';
-  c.width = 860; c.height = 360;
+  const chartWrap = document.createElement('div'); chartWrap.className = 'chart-wrap'; chartWrap.style.width='100%'; chartWrap.style.maxWidth='820px';
+  const c = document.createElement('canvas'); c.className = 'chartCanvas'; c.width = 860; c.height = 360;
   chartWrap.appendChild(c);
 
-  inner.appendChild(h);
-  inner.appendChild(p);
-  inner.appendChild(s);
-  inner.appendChild(chartWrap);
+  inner.appendChild(h); inner.appendChild(p); inner.appendChild(s); inner.appendChild(chartWrap);
   slide.appendChild(inner);
-
   return slide;
 }
 
-function animateReplace(newSlide, direction = 'next'){
+function animateReplace(newSlide){
   const old = slideContainer.querySelector('.slide');
-  // prepare new slide off-screen small offset
   slideContainer.appendChild(newSlide);
+  // trigger enter animation
   requestAnimationFrame(()=> {
     newSlide.classList.remove('enter');
     newSlide.classList.add('enter-active');
   });
-
   if(old){
     old.classList.add('exit');
-    requestAnimationFrame(()=> {
-      old.classList.add('exit-active');
-    });
-    // remove old after animation
-    setTimeout(()=> {
-      if(old && old.parentNode) old.parentNode.removeChild(old);
-    }, 420);
+    requestAnimationFrame(()=> { old.classList.add('exit-active'); });
+    setTimeout(()=> { if(old && old.parentNode) old.parentNode.removeChild(old); }, 420);
   }
 }
 
-/* ---------- Chart rendering using Chart.js, safe create/destroy ---------- */
+/* Chart rendering: find the canvas inside current slide and draw */
 function renderChartForTopic(topic){
-  // find canvas
-  const canvas = document.getElementById('chartCanvas');
+  // locate the current slide's canvas
+  const slide = slideContainer.querySelector('.slide');
+  if(!slide) return;
+  const canvas = slide.querySelector('canvas.chartCanvas');
   if(!canvas) return;
   const ctx = canvas.getContext('2d');
-  // destroy previous
+
+  // destroy previous chart safely
   if(activeChart){ try{ activeChart.destroy(); }catch(e){} activeChart = null; }
-  // build data
+
+  // prepare data
   const labels = topic.stats.map(s => s.label);
   const values = topic.stats.map(s => s.value);
   const palette = values.map((v,idx)=> `hsla(${topic.color},90%,60%,${0.9 - idx*0.12})`);
 
-  // default config
   const cfg = {
     type: topic.chartType,
-    data: { labels, datasets: [{ label: topic.title, data: values, backgroundColor: palette, borderColor:'rgba(255,255,255,0.9)', borderWidth:2, fill: topic.chartType==='line' ? false : true, tension:0.3 }] },
+    data: {
+      labels,
+      datasets: [{
+        label: topic.title,
+        data: values,
+        backgroundColor: palette,
+        borderColor: 'rgba(255,255,255,0.9)',
+        borderWidth: 2,
+        fill: topic.chartType === 'line' ? false : true,
+        tension: 0.28,
+        pointRadius: 4
+      }]
+    },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { labels: { color: 'white' } } },
+      plugins: {
+        legend: { labels: { color: '#eaf6f5' } },
+        tooltip: { callbacks: {} }
+      },
       scales: {
-        x: { ticks:{ color: 'var(--accent)' }, grid:{ color:'rgba(255,255,255,0.04)' } },
-        y: { ticks:{ color: 'var(--accent)' }, grid:{ color:'rgba(255,255,255,0.04)' }, beginAtZero:true }
+        x: { ticks: { color: 'var(--accent)' }, grid: { color: 'rgba(255,255,255,0.04)' } },
+        y: { ticks: { color: 'var(--accent)' }, grid: { color: 'rgba(255,255,255,0.04)' }, beginAtZero: true }
       }
     }
   };
 
+  // tweak for special types
   if(topic.chartType === 'radar'){ cfg.options.scales = {}; cfg.options.elements = { line: { borderWidth: 2 } }; }
-  if(topic.chartType === 'polarArea'){ cfg.options.scales = {}; cfg.options.plugins.legend = { position:'right', labels:{ color:'white' } }; }
-  if(topic.chartType === 'doughnut' || topic.chartType === 'pie'){ cfg.options.scales = {}; cfg.options.plugins.legend = { position:'right', labels:{ color:'white' } }; }
+  if(topic.chartType === 'polarArea'){ cfg.options.scales = {}; cfg.options.plugins.legend = { position:'right', labels:{ color:'#eaf6f5' } }; }
+  if(topic.chartType === 'doughnut' || topic.chartType === 'pie'){ cfg.options.scales = {}; cfg.options.plugins.legend = { position:'right', labels:{ color:'#eaf6f5' } }; }
   if(topic.chartType === 'line'){ cfg.options.scales.y.beginAtZero = true; }
 
-  activeChart = new Chart(canvas, cfg);
+  activeChart = new Chart(ctx, cfg);
 }
 
-/* ---------- Navigation / show topic ---------- */
+/* Navigation and show topic */
 function updateActiveButton(i){
   const btns = document.querySelectorAll('.topic-btn');
   btns.forEach((b, idx) => b.classList.toggle('active', idx === i));
@@ -296,24 +295,18 @@ function goto(i){
   current = i;
   updateActiveButton(i);
   const topic = TOPICS[i];
-  // update hue (background neon color)
-  hue = topic.color;
-  // update title quickly
+  hue = topic.color; // change neon hue
   document.getElementById('topicTitle').textContent = topic.title;
   document.getElementById('topicTag').textContent = topic.tag;
-  // create slide and animate
   const newSlide = createSlideElement(topic);
   animateReplace(newSlide);
-  // slight delay to ensure slide inserted then render chart
-  setTimeout(()=> { renderChartForTopic(topic); }, 120);
+  setTimeout(()=> { renderChartForTopic(topic); }, 140);
 }
 
-/* previous / next buttons */
+/* Prev/Next and keyboard */
 document.getElementById('prevBtn').addEventListener('click', ()=> goto((current - 1 + TOPICS.length) % TOPICS.length));
 document.getElementById('nextBtn').addEventListener('click', ()=> goto((current + 1) % TOPICS.length));
-
-/* keyboard navigation: left/right */
-addEventListener('keydown', (e)=>{
+addEventListener('keydown', (e)=> {
   if(e.key === 'ArrowRight') goto((current + 1) % TOPICS.length);
   if(e.key === 'ArrowLeft') goto((current - 1 + TOPICS.length) % TOPICS.length);
 });
@@ -322,15 +315,19 @@ addEventListener('keydown', (e)=>{
 buildButtons();
 goto(0);
 
-/* Slight hue drift so background glows subtly */
-setInterval(()=>{ hue += 0.25; if(hue > 360) hue = 0; }, 160);
+/* tiny hue drift for lively neon */
+setInterval(()=>{ hue += 0.22; if(hue > 360) hue = 0; }, 160);
 
-/* Optional: small performance tip for mobile - pause background when tab not visible */
+/* performance: pause drawing if tab hidden (optional) */
+let bgPaused = false;
 document.addEventListener('visibilitychange', ()=>{
-  if(document.hidden) {
-    // could pause heavy things here if necessary
-  }
+  if(document.hidden){ bgPaused = true; } else { bgPaused = false; requestAnimationFrame(animBG); }
 });
+function animBG(){
+  if(bgPaused) return;
+  drawBG();
+  requestAnimationFrame(animBG);
+}
 </script>
 
 </body>
