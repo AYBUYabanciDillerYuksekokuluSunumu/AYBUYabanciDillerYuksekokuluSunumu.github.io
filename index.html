@@ -194,4 +194,9 @@ addEventListener('keydown',(e)=>{if(e.key==='ArrowRight')goto((current+1)%TOPICS
 
 buildButtons(); goto(0);
 
-setInterval(()=>{ hue+=0
+setInterval(()=>{ hue+=0.22; if(hue>360) hue=0; },160);
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden) requestAnimationFrame(animBG); });
+</script>
+
+</body>
+</html>
