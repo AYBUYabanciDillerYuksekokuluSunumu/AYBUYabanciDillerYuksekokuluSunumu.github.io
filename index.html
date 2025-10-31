@@ -1,244 +1,199 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AI Evolution — beşincisafa edition</title>
-  <style>
-    body {
-      margin: 0;
-      background: #010114;
-      color: #eaf6f5;
-      font-family: 'Inter', system-ui, sans-serif;
-      overflow-x: hidden;
-    }
-    canvas#bgCanvas {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
-    .container {
-      position: relative;
-      z-index: 2;
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      max-width: 1100px;
-      margin: 40px auto;
-      background: rgba(255, 255, 255, 0.02);
-      border-radius: 14px;
-      overflow: hidden;
-      backdrop-filter: blur(10px);
-    }
-    aside {
-      background: rgba(0, 0, 0, 0.4);
-      padding: 20px;
-      border-right: 1px solid rgba(255,255,255,0.05);
-    }
-    aside h1 {
-      font-size: 22px;
-      color: transparent;
-      background: linear-gradient(90deg, #00ffe0, #5eead4);
-      -webkit-background-clip: text;
-    }
-    main {
-      padding: 30px;
-    }
-    .topic-btn {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      background: rgba(255,255,255,0.05);
-      border: none;
-      border-radius: 8px;
-      margin: 6px 0;
-      color: #fff;
-      text-align: left;
-      cursor: pointer;
-      transition: all .2s;
-    }
-    .topic-btn:hover, .topic-btn.active {
-      background: rgba(0,255,224,0.15);
-      box-shadow: 0 0 10px rgba(0,255,224,0.3);
-    }
-    h2 {
-      color: transparent;
-      background: linear-gradient(90deg,#00ffe0,#7af1da);
-      -webkit-background-clip: text;
-      font-size: 20px;
-      margin-bottom: 8px;
-    }
-    p {
-      color: #9aa7b5;
-    }
-    .chart-area {
-      margin-top: 20px;
-      height: 250px;
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 10px;
-      background: rgba(0,0,0,0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    .controls {
-      margin-top: 20px;
-      display: flex;
-      gap: 10px;
-    }
-    button.ctrl {
-      background: transparent;
-      border: 1px solid rgba(0,255,224,0.2);
-      color: #bafbe8;
-      padding: 8px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    button.ctrl:hover {
-      box-shadow: 0 0 10px rgba(0,255,224,0.3);
-    }
-    a.corner {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      text-decoration: none;
-      color: #001018;
-      background: linear-gradient(90deg,#00ffe0,#5eead4);
-      padding: 6px 10px;
-      border-radius: 8px;
-      font-weight: 700;
-      z-index: 3;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI in the Last Decade</title>
+<style>
+  body {
+    margin: 0;
+    background: radial-gradient(circle at center, #0b0b0b, #000);
+    color: #eaf6f5;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+  }
+  header {
+    text-align: center;
+    padding: 20px;
+    font-size: 2rem;
+    color: cyan;
+    text-shadow: 0 0 10px cyan;
+  }
+  .topic-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 75vh;
+    text-align: center;
+    transition: all 0.6s ease;
+  }
+  h2 {
+    font-size: 1.8rem;
+    color: #00ffff;
+    text-shadow: 0 0 10px #00ffff;
+  }
+  p {
+    width: 60%;
+    font-size: 1rem;
+  }
+  .chart {
+    width: 400px;
+    height: 250px;
+    margin-top: 20px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  canvas {
+    width: 100%;
+    height: 100%;
+  }
+  .controls {
+    text-align: center;
+    margin: 15px;
+  }
+  button {
+    background: none;
+    border: 2px solid cyan;
+    color: cyan;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s;
+  }
+  button:hover {
+    background: cyan;
+    color: black;
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <canvas id="bgCanvas"></canvas>
-  <a class="corner" href="https://aybusunum06.github.io" target="_blank">aybusunum06.github.io</a>
-  <div class="container">
-    <aside>
-      <h1>AI Evolution</h1>
-      <div id="topics"></div>
-    </aside>
-    <main>
-      <h2 id="title">Welcome</h2>
-      <p id="desc">Click a topic to view how AI has shaped different fields in the last decade — each comes with a cool chart.</p>
-      <div class="chart-area">
-        <canvas id="chart" width="600" height="250"></canvas>
-      </div>
-      <div class="controls">
-        <button class="ctrl" id="prevBtn">◀ Previous</button>
-        <button class="ctrl" id="nextBtn">Next ▶</button>
-      </div>
-    </main>
-  </div>
+<header>AI’s Impact in the Last Decade</header>
 
-  <script>
-    // Background neural net
-    const bg = document.getElementById('bgCanvas');
-    const bctx = bg.getContext('2d');
-    let W, H, points = [];
-    function resizeBG(){
-      W = bg.width = innerWidth;
-      H = bg.height = innerHeight;
-      points = Array.from({length:100},()=>({
-        x: Math.random()*W,
-        y: Math.random()*H,
-        vx: (Math.random()-0.5)*0.4,
-        vy: (Math.random()-0.5)*0.4
-      }));
-    }
-    function drawBG(){
-      bctx.clearRect(0,0,W,H);
-      for(const p of points){
-        p.x += p.vx; p.y += p.vy;
-        if(p.x<0||p.x>W) p.vx*=-1;
-        if(p.y<0||p.y>H) p.vy*=-1;
-      }
-      for(let i=0;i<points.length;i++){
-        for(let j=i+1;j<i+6;j++){
-          const a=points[i],b=points[j];
-          const dx=a.x-b.x, dy=a.y-b.y, d=Math.hypot(dx,dy);
-          if(d<150){
-            bctx.strokeStyle=`rgba(0,255,224,${1-d/150})`;
-            bctx.lineWidth=0.5;
-            bctx.beginPath();
-            bctx.moveTo(a.x,a.y);
-            bctx.lineTo(b.x,b.y);
-            bctx.stroke();
-          }
-        }
-      }
-    }
-    resizeBG();
-    addEventListener('resize', resizeBG);
-    (function anim(){drawBG();requestAnimationFrame(anim);})();
+<div class="topic-container">
+  <h2 id="title"></h2>
+  <p id="desc"></p>
+  <div class="chart"><canvas id="chartCanvas"></canvas></div>
+</div>
 
-    // Topics
-    const topics = [
-      {title:'AI Basics',desc:'Introduction to AI and machine learning.',chart:'bar'},
-      {title:'Communication',desc:'AI-powered translators and chatbots.',chart:'line'},
-      {title:'Healthcare',desc:'AI-assisted diagnosis and patient care.',chart:'pie'},
-      {title:'Education',desc:'Adaptive learning systems.',chart:'radar'},
-      {title:'Transportation',desc:'Autonomous vehicles and logistics.',chart:'scatter'},
-      {title:'Economy',desc:'Automation and AI-driven markets.',chart:'combo'},
-      {title:'Ethics',desc:'Bias, privacy and moral AI.',chart:'grid'},
-      {title:'Future',desc:'AI’s next decade of transformation.',chart:'block'}
-    ];
+<div class="controls">
+  <button onclick="prevTopic()">Previous</button>
+  <button onclick="nextTopic()">Next</button>
+</div>
 
-    const tList = document.getElementById('topics');
-    topics.forEach((t,i)=>{
-      const b=document.createElement('button');
-      b.textContent=t.title;
-      b.className='topic-btn'+(i===0?' active':'');
-      b.onclick=()=>selectTopic(i);
-      tList.appendChild(b);
-    });
+<script>
+const topics = [
+  {
+    title: "Healthcare",
+    desc: "AI improved medical diagnostics, helping doctors detect diseases faster and more accurately.",
+    chartType: "bar",
+    stats: [
+      { label: "Diagnosis Accuracy", percent: 92 },
+      { label: "Efficiency", percent: 80 },
+      { label: "Patient Trust", percent: 70 }
+    ]
+  },
+  {
+    title: "Transportation",
+    desc: "Autonomous vehicles reduced accidents and improved fuel efficiency.",
+    chartType: "line",
+    stats: [
+      { label: "Accident Reduction", percent: 45 },
+      { label: "Efficiency", percent: 60 },
+      { label: "Adoption Rate", percent: 30 }
+    ]
+  },
+  {
+    title: "Education",
+    desc: "AI personalized learning experiences for students through adaptive platforms.",
+    chartType: "pie",
+    stats: [
+      { label: "Student Engagement", percent: 75 },
+      { label: "Personalization", percent: 65 },
+      { label: "AI Integration", percent: 55 }
+    ]
+  },
+  {
+    title: "Economy & Work",
+    desc: "Automation reshaped jobs, increasing productivity but raising concerns about employment.",
+    chartType: "radar",
+    stats: [
+      { label: "Productivity", percent: 85 },
+      { label: "Automation", percent: 70 },
+      { label: "Job Shift", percent: 50 }
+    ]
+  },
+  {
+    title: "Social Media & Daily Life",
+    desc: "AI shaped online content, recommendations, and personal assistants like Siri and Alexa.",
+    chartType: "doughnut",
+    stats: [
+      { label: "AI Usage", percent: 90 },
+      { label: "Privacy Awareness", percent: 40 },
+      { label: "Time Saved", percent: 60 }
+    ]
+  }
+];
 
-    let current=0;
-    const title=document.getElementById('title');
-    const desc=document.getElementById('desc');
-    const chart=document.getElementById('chart');
-    const ctx=chart.getContext('2d');
+let current = 0;
+let chart;
 
-    function drawBar(){ctx.clearRect(0,0,600,250);const vals=[50,70,90,40,60];vals.forEach((v,i)=>{ctx.fillStyle=`rgba(0,255,224,${0.3+i*0.1})`;ctx.fillRect(80+i*90,250-v*2,40,v*2);});}
-    function drawLine(){ctx.clearRect(0,0,600,250);ctx.beginPath();ctx.moveTo(50,200);[100,200,300,400,500].forEach((x,i)=>{ctx.lineTo(x,200-Math.sin(i)*80-50);});ctx.strokeStyle='rgba(0,255,224,0.8)';ctx.lineWidth=2;ctx.stroke();}
-    function drawPie(){ctx.clearRect(0,0,600,250);const data=[30,20,25,25];const colors=['#00ffe0','#5eead4','#7af1da','#3ae8b7'];let start=0;data.forEach((v,i)=>{ctx.beginPath();ctx.moveTo(300,125);ctx.fillStyle=colors[i];ctx.arc(300,125,90,start,start+Math.PI*2*(v/100));ctx.fill();start+=Math.PI*2*(v/100);});}
-    function drawRadar(){ctx.clearRect(0,0,600,250);ctx.translate(300,125);const p=6,r=80;ctx.strokeStyle='rgba(0,255,224,0.4)';for(let i=0;i<p;i++){ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(r*Math.cos((i/p)*2*Math.PI),r*Math.sin((i/p)*2*Math.PI));ctx.stroke();}ctx.beginPath();ctx.moveTo(r,0);for(let i=1;i<=p;i++){ctx.lineTo(r*Math.cos((i/p)*2*Math.PI)*Math.random(),r*Math.sin((i/p)*2*Math.PI)*Math.random());}ctx.closePath();ctx.strokeStyle='#00ffe0';ctx.stroke();ctx.resetTransform();}
-    function drawScatter(){ctx.clearRect(0,0,600,250);for(let i=0;i<30;i++){ctx.beginPath();ctx.arc(Math.random()*600,Math.random()*250,3,0,Math.PI*2);ctx.fillStyle='rgba(0,255,224,0.7)';ctx.fill();}}
-    function drawCombo(){drawBar();ctx.beginPath();ctx.moveTo(100,200);ctx.lineTo(200,100);ctx.lineTo(300,150);ctx.lineTo(400,120);ctx.lineTo(500,180);ctx.strokeStyle='#fff';ctx.stroke();}
-    function drawGrid(){ctx.clearRect(0,0,600,250);for(let x=0;x<600;x+=30){for(let y=0;y<250;y+=30){ctx.fillStyle=`rgba(0,255,224,${Math.random()*0.5})`;ctx.fillRect(x,y,10,10);}}}
-    function drawBlock(){ctx.clearRect(0,0,600,250);for(let i=0;i<8;i++){ctx.fillStyle=`rgba(0,255,224,${0.2+i*0.1})`;ctx.fillRect(60*i+50,250-20*i,50,20*i);}}
+function showTopic() {
+  const t = topics[current];
+  document.getElementById("title").innerText = t.title;
+  document.getElementById("desc").innerText = t.desc;
 
-    function drawChart(type){
-      ctx.resetTransform();
-      switch(type){
-        case'bar':drawBar();break;
-        case'line':drawLine();break;
-        case'pie':drawPie();break;
-        case'radar':drawRadar();break;
-        case'scatter':drawScatter();break;
-        case'combo':drawCombo();break;
-        case'grid':drawGrid();break;
-        case'block':drawBlock();break;
+  const ctx = document.getElementById("chartCanvas").getContext("2d");
+  if (chart) chart.destroy();
+
+  const labels = t.stats.map(s => s.label);
+  const data = t.stats.map(s => s.percent);
+
+  const colors = ['#00ffff','#00ff80','#80ff00','#ff8000','#ff00ff'];
+
+  chart = new Chart(ctx, {
+    type: t.chartType,
+    data: {
+      labels,
+      datasets: [{
+        label: 'AI Progress (%)',
+        data,
+        backgroundColor: colors.slice(0, data.length),
+        borderColor: 'cyan',
+        borderWidth: 2,
+        fill: t.chartType === "line" ? false : true,
+        tension: 0.4
+      }]
+    },
+    options: {
+      scales: { 
+        y: { beginAtZero: true, ticks: { color: '#00ffff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+        x: { ticks: { color: '#00ffff' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+      },
+      plugins: {
+        legend: { labels: { color: 'white' } }
       }
     }
+  });
+}
 
-    function selectTopic(i){
-      document.querySelectorAll('.topic-btn').forEach(b=>b.classList.remove('active'));
-      document.querySelectorAll('.topic-btn')[i].classList.add('active');
-      current=i;
-      const t=topics[i];
-      title.textContent=t.title;
-      desc.textContent=t.desc;
-      drawChart(t.chart);
-    }
+function nextTopic() {
+  current = (current + 1) % topics.length;
+  showTopic();
+}
 
-    document.getElementById('prevBtn').onclick=()=>selectTopic((current-1+topics.length)%topics.length);
-    document.getElementById('nextBtn').onclick=()=>selectTopic((current+1)%topics.length);
+function prevTopic() {
+  current = (current - 1 + topics.length) % topics.length;
+  showTopic();
+}
 
-    drawChart('bar');
-  </script>
+showTopic();
+</script>
 </body>
 </html>
