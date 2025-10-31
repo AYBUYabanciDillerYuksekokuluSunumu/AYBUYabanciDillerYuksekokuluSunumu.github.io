@@ -61,7 +61,8 @@ const topics=[
 {title:"10. The Future",desc:"AI will grow and support medicine, climate, exploration ethically.",chart:"pie",stats:[{label:"Innovation",value:95},{label:"Ethics Focus",value:72},{label:"Trust",value:60}],source:"Global AI 2024"}
 ];
 
-let current=0;let chartInstance=null;
+let current=0;
+let chartInstance=null;
 const topicTitle=document.getElementById('topicTitle');
 const topicDesc=document.getElementById('topicDesc');
 const sourceNote=document.getElementById('sourceNote');
@@ -69,22 +70,59 @@ const chartCanvas=document.getElementById('chartCanvas');
 const topicListEl=document.getElementById('topicList');
 
 function renderChart(topic){
-if(chartInstance)chartInstance.destroy();
-const labels=topic.stats.map(s=>s.label);
-const data=topic.stats.map(s=>s.value);
-const bgColors=data.map((v,i)=>`hsla(${50+i*30},90%,60%,0.8)`);
-chartInstance=new Chart(chartCanvas,{type:topic.chart,plugins:[ChartDataLabels],data:{labels,datasets:[{label:topic.title,data,data,borderWidth:2,backgroundColor:bgColors,borderColor:"#fff"}]},options:{plugins:{legend:{labels:{color:"#eaf6f5"}},datalabels:{color:"#fff",formatter:(val)=>val+"%"}}}});
+  if(chartInstance) chartInstance.destroy();
+  const labels=topic.stats.map(s=>s.label);
+  const data=topic.stats.map(s=>s.value);
+  const bgColors=data.map((v,i)=>`hsla(${50+i*30},90%,60%,0.8)`);
+  chartInstance=new Chart(chartCanvas,{
+    type: topic.chart,
+    plugins:[ChartDataLabels],
+    data:{labels,datasets:[{label:topic.title,data,data,backgroundColor:bgColors,borderColor:"#fff",borderWidth:2}]},
+    options:{
+      plugins:{
+        legend:{labels:{color:"#eaf6f5"}},
+        datalabels:{
+          color:"#fff",
+          font:{weight:"bold",size:14},
+          anchor:'end',
+          align:'end',
+          formatter:(val)=>val+"%"
+        }
+      },
+      responsive:true,
+      maintainAspectRatio:false,
+      scales:{
+        x:{ticks:{color:'#00c9a7'},grid:{color:'rgba(255,255,255,0.04)'}},
+        y:{ticks:{color:'#00c9a7'},grid:{color:'rgba(255,255,255,0.04)'},beginAtZero:true}
+      }
+    }
+  });
 }
 
 function showTopic(i){
-current=i;topics.forEach((t,idx)=>topicListEl.children[idx].classList.toggle('active',idx===i));
-const t=topics[i];topicTitle.textContent=t.title;topicDesc.textContent=t.desc;sourceNote.textContent=t.source;renderChart(t);
+  current=i;
+  topics.forEach((t,idx)=>topicListEl.children[idx].classList.toggle('active',idx===i));
+  const t=topics[i];
+  topicTitle.textContent=t.title;
+  topicDesc.textContent=t.desc;
+  sourceNote.textContent=t.source;
+  renderChart(t);
 }
 
-topics.forEach((t,i)=>{const btn=document.createElement('button');btn.textContent=t.title;btn.className="topic-btn";btn.onclick=()=>showTopic(i);topicListEl.appendChild(btn);});
+topics.forEach((t,i)=>{
+  const btn=document.createElement('button');
+  btn.textContent=t.title;
+  btn.className="topic-btn";
+  btn.onclick=()=>showTopic(i);
+  topicListEl.appendChild(btn);
+});
+
 document.getElementById('prevBtn').onclick=()=>showTopic((current-1+topics.length)%topics.length);
 document.getElementById('nextBtn').onclick=()=>showTopic((current+1)%topics.length);
-document.addEventListener('keydown',e=>{if(e.key==="ArrowRight")showTopic((current+1)%topics.length);if(e.key==="ArrowLeft")showTopic((current-1+topics.length)%topics.length);});
+document.addEventListener('keydown',e=>{
+  if(e.key==="ArrowRight") showTopic((current+1)%topics.length);
+  if(e.key==="ArrowLeft") showTopic((current-1+topics.length)%topics.length);
+});
 
 showTopic(0);
 </script>
