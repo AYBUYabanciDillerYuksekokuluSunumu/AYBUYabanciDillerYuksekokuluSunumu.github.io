@@ -26,7 +26,6 @@
     justify-content: center;
     height: 70vh;
     text-align: center;
-    transition: all 0.6s ease;
   }
   h2 {
     font-size: 1.8rem;
@@ -34,14 +33,14 @@
     text-shadow: 0 0 10px white;
   }
   p {
-    width: 65%;
-    font-size: 1rem;
+    width: 70%;
+    font-size: 1.05rem;
+    line-height: 1.5;
     margin-bottom: 20px;
   }
   .chart {
     width: 400px;
     height: 250px;
-    margin-top: 10px;
     background: rgba(255,255,255,0.08);
     border-radius: 20px;
     box-shadow: 0 0 20px rgba(255,255,255,0.15);
@@ -86,106 +85,106 @@
 const topics = [
   {
     title: "1. Healthcare",
-    desc: "AI helps doctors detect diseases faster and saves lives through early diagnosis.",
+    desc: "Over the last decade, AI has helped doctors find diseases earlier and make more accurate decisions. From cancer detection to robot surgeries, machines have become a real support for saving lives.",
     chartType: "bar",
     stats: [
-      { label: "Accuracy", percent: 92 },
+      { label: "Accuracy", percent: 93 },
       { label: "Speed", percent: 85 },
-      { label: "Adoption", percent: 70 }
+      { label: "Usage", percent: 75 }
     ],
     color: "radial-gradient(circle, #001f3f, #000)"
   },
   {
     title: "2. Transportation",
-    desc: "Self-driving cars and AI traffic systems made travel safer and smarter.",
+    desc: "Self-driving cars, traffic lights, and route apps started using AI to reduce accidents and save time. Even airplanes use it now to improve flight safety and fuel control.",
     chartType: "line",
     stats: [
-      { label: "Safety", percent: 75 },
-      { label: "Efficiency", percent: 60 },
-      { label: "Development", percent: 50 }
+      { label: "Safety", percent: 78 },
+      { label: "Fuel Saving", percent: 68 },
+      { label: "Automation", percent: 55 }
     ],
     color: "radial-gradient(circle, #002b36, #000)"
   },
   {
     title: "3. Education",
-    desc: "AI tutors and adaptive learning help students study at their own pace.",
+    desc: "AI tools like ChatGPT and personalized learning apps make studying easier. Students get help based on their own level, and teachers can understand students’ needs faster.",
     chartType: "pie",
     stats: [
-      { label: "Engagement", percent: 80 },
-      { label: "Personalization", percent: 65 },
-      { label: "Accessibility", percent: 50 }
+      { label: "Personalization", percent: 80 },
+      { label: "Accessibility", percent: 70 },
+      { label: "Motivation", percent: 65 }
     ],
     color: "radial-gradient(circle, #1a0033, #000)"
   },
   {
     title: "4. Entertainment",
-    desc: "AI creates music, games, and movies designed just for you.",
+    desc: "AI writes music, creates realistic art, and even designs video games. Platforms like Netflix and Spotify use it to guess what we’ll enjoy next.",
     chartType: "doughnut",
     stats: [
-      { label: "Music AI", percent: 60 },
-      { label: "Movies", percent: 70 },
-      { label: "Games", percent: 55 }
+      { label: "Content Creation", percent: 75 },
+      { label: "Personalized Recs", percent: 90 },
+      { label: "Innovation", percent: 85 }
     ],
     color: "radial-gradient(circle, #33001a, #000)"
   },
   {
     title: "5. Communication",
-    desc: "AI translators and chatbots made global conversation easier than ever.",
+    desc: "AI translation tools broke language barriers. Chatbots and voice assistants like Siri or Alexa became part of our daily conversations.",
     chartType: "bar",
     stats: [
-      { label: "Speed", percent: 90 },
-      { label: "Accuracy", percent: 80 },
-      { label: "Use Rate", percent: 75 }
+      { label: "Translation", percent: 88 },
+      { label: "Voice AI", percent: 80 },
+      { label: "Speed", percent: 85 }
     ],
     color: "radial-gradient(circle, #003300, #000)"
   },
   {
-    title: "6. Economy & Jobs",
-    desc: "Automation increased productivity but changed many traditional jobs.",
+    title: "6. Jobs & Economy",
+    desc: "AI replaced some jobs but also created new ones in programming, design, and data analysis. It helps businesses work faster and make smarter decisions.",
     chartType: "radar",
     stats: [
       { label: "Productivity", percent: 85 },
       { label: "Automation", percent: 70 },
-      { label: "Job Shift", percent: 50 }
+      { label: "Job Change", percent: 60 }
     ],
     color: "radial-gradient(circle, #332900, #000)"
   },
   {
     title: "7. Social Media",
-    desc: "AI recommends what we see, shaping opinions and habits.",
+    desc: "AI decides what we see on our feeds. It understands what we like, but it also raises concerns about privacy and addiction.",
     chartType: "polarArea",
     stats: [
-      { label: "Recommendation", percent: 95 },
-      { label: "Ads", percent: 80 },
-      { label: "Influence", percent: 85 }
+      { label: "Recommendations", percent: 95 },
+      { label: "Ads", percent: 85 },
+      { label: "Privacy", percent: 40 }
     ],
     color: "radial-gradient(circle, #001a33, #000)"
   },
   {
-    title: "8. Home & Daily Life",
-    desc: "Smart assistants and home devices made life simpler and more connected.",
+    title: "8. Home & Lifestyle",
+    desc: "Smart homes use AI to adjust lights, clean the house, and even cook meals. Everything becomes connected and more energy efficient.",
     chartType: "bar",
     stats: [
       { label: "Comfort", percent: 85 },
-      { label: "Use Rate", percent: 70 },
-      { label: "Automation", percent: 60 }
+      { label: "Energy Saving", percent: 75 },
+      { label: "Smart Use", percent: 65 }
     ],
     color: "radial-gradient(circle, #330033, #000)"
   },
   {
     title: "9. Security",
-    desc: "AI protects data and helps detect cyber threats faster.",
+    desc: "AI systems detect fraud, cyberattacks, and even criminal behavior before humans can. It protects banks, companies, and governments 24/7.",
     chartType: "doughnut",
     stats: [
       { label: "Threat Detection", percent: 90 },
-      { label: "Response Speed", percent: 80 },
-      { label: "Accuracy", percent: 85 }
+      { label: "Response Speed", percent: 82 },
+      { label: "Accuracy", percent: 88 }
     ],
     color: "radial-gradient(circle, #1a0000, #000)"
   },
   {
     title: "10. The Future",
-    desc: "AI continues to evolve — making the world smarter, faster, and more creative.",
+    desc: "In the next years, AI will continue to grow. It will help solve climate problems, explore space, and make human life more creative and meaningful.",
     chartType: "pie",
     stats: [
       { label: "Innovation", percent: 95 },
@@ -210,7 +209,6 @@ function showTopic() {
 
   const labels = t.stats.map(s => s.label);
   const data = t.stats.map(s => s.percent);
-
   const colors = ['#00ffff','#00ff80','#80ff00','#ff8000','#ff00ff'];
 
   chart = new Chart(ctx, {
