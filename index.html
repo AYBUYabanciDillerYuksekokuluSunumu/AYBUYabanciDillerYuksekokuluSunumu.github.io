@@ -1,257 +1,244 @@
-   <!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AI Evolution — Interactive</title>
+  <title>AI Evolution — beşincisafa edition</title>
   <style>
-    :root{
-      --bg:#010114;
-      --muted:#9aa7b5;
-      --glass:rgba(255,255,255,0.03);
-      --ui-font:'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    body {
+      margin: 0;
+      background: #010114;
+      color: #eaf6f5;
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow-x: hidden;
     }
-    html,body{height:100%;margin:0;font-family:var(--ui-font);background:var(--bg);color:#eaf6f5}
-    #bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
-    .wrap{position:relative;z-index:1;max-width:1100px;margin:28px auto;border-radius:14px;overflow:hidden;display:grid;grid-template-columns:340px 1fr;backdrop-filter:blur(6px)}
-    .sidebar{padding:26px;background:linear-gradient(180deg, rgba(0,0,0,0.35), rgba(2,8,20,0.55));border-right:1px solid rgba(255,255,255,0.03)}
-    h1{margin:0;font-size:22px;color:transparent;background:linear-gradient(90deg,#00ffe0,#5eead4);-webkit-background-clip:text}
-    p.lead{margin:8px 0 18px;color:var(--muted);font-size:13px}
-    .topic-list{display:flex;flex-direction:column;gap:10px}
-    .topic-btn{display:flex;gap:10px;align-items:center;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));cursor:pointer;transition:transform .12s, box-shadow .12s}
-    .topic-btn:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,255,224,0.06)}
-    .topic-btn.active{box-shadow:0 10px 30px rgba(0,255,224,0.15);background:linear-gradient(90deg, rgba(0,255,224,0.08), rgba(94,234,212,0.06))}
-    .topic-icon{width:40px;height:40px;border-radius:8px;background:rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;font-weight:700;color:#cff}
-    .content{padding:28px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.05));}
-    .card{padding:20px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.04));border:1px solid rgba(255,255,255,0.03)}
-    .title-row{display:flex;justify-content:space-between;align-items:center}
-    h2{margin:0;font-size:20px;color:transparent;background:linear-gradient(90deg,#00ffe0,#7af1da);-webkit-background-clip:text}
-    .desc{margin-top:12px;color:var(--muted);line-height:1.5}
-    .stat-row{display:flex;gap:12px;margin-top:14px}
-    .stat{min-width:120px;padding:10px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.03));border:1px solid rgba(255,255,255,0.02);text-align:center}
-    .visual{margin-top:16px;height:200px;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.4))}
-    .visual img{max-width:100%;max-height:100%;filter:drop-shadow(0 8px 20px rgba(0,255,224,0.06));opacity:0.98}
-    .visual .overlay{position:absolute;inset:0;background:linear-gradient(90deg, rgba(0,255,224,0.02), rgba(0,0,0,0));pointer-events:none}
-    .controls{display:flex;gap:12px;margin-top:18px}
-    .btn{padding:10px 14px;border-radius:10px;border:0;cursor:pointer;background:transparent;color:#bafbe8;font-weight:700;border:1px solid rgba(0,255,224,0.12)}
-    .btn:hover{box-shadow:0 8px 30px rgba(0,255,224,0.08);transform:translateY(-2px)}
-    .corner-link{position:absolute;top:12px;right:12px;padding:8px 10px;border-radius:8px;background:linear-gradient(90deg,#00ffe0,#5eead4);color:#001018;font-weight:700;text-decoration:none;z-index:3}
-    .glow{box-shadow:0 6px 28px rgba(0,255,224,0.12), 0 0 80px rgba(0,255,224,0.04)}
-    @media (max-width:900px){.wrap{grid-template-columns:1fr}.sidebar{order:2}.content{order:1}.visual{height:140px}}
+    canvas#bgCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .container {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      max-width: 1100px;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 14px;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+    aside {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 20px;
+      border-right: 1px solid rgba(255,255,255,0.05);
+    }
+    aside h1 {
+      font-size: 22px;
+      color: transparent;
+      background: linear-gradient(90deg, #00ffe0, #5eead4);
+      -webkit-background-clip: text;
+    }
+    main {
+      padding: 30px;
+    }
+    .topic-btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background: rgba(255,255,255,0.05);
+      border: none;
+      border-radius: 8px;
+      margin: 6px 0;
+      color: #fff;
+      text-align: left;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .topic-btn:hover, .topic-btn.active {
+      background: rgba(0,255,224,0.15);
+      box-shadow: 0 0 10px rgba(0,255,224,0.3);
+    }
+    h2 {
+      color: transparent;
+      background: linear-gradient(90deg,#00ffe0,#7af1da);
+      -webkit-background-clip: text;
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+    p {
+      color: #9aa7b5;
+    }
+    .chart-area {
+      margin-top: 20px;
+      height: 250px;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      background: rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    button.ctrl {
+      background: transparent;
+      border: 1px solid rgba(0,255,224,0.2);
+      color: #bafbe8;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    button.ctrl:hover {
+      box-shadow: 0 0 10px rgba(0,255,224,0.3);
+    }
+    a.corner {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      text-decoration: none;
+      color: #001018;
+      background: linear-gradient(90deg,#00ffe0,#5eead4);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      z-index: 3;
+    }
   </style>
 </head>
 <body>
   <canvas id="bgCanvas"></canvas>
-
-  <div class="wrap">
-    <a class="corner-link" href="https://aybusunum06.github.io" target="_blank">aybusunum06.github.io</a>
-
-    <aside class="sidebar">
+  <a class="corner" href="https://aybusunum06.github.io" target="_blank">aybusunum06.github.io</a>
+  <div class="container">
+    <aside>
       <h1>AI Evolution</h1>
-      <p class="lead">Interactive demo — click a topic to reveal a short summary, a visual and a quick stat.</p>
-      <div class="topic-list" id="topicList"></div>
-      <footer style="margin-top:18px;color:var(--muted);font-size:13px">Made by <strong>beşincisafa</strong></footer>
+      <div id="topics"></div>
     </aside>
-
-    <main class="content">
-      <div class="card">
-        <div class="title-row">
-          <h2 id="topicTitle">Welcome</h2>
-          <div id="topicTag" style="color:var(--muted);font-size:13px">Select a topic</div>
-        </div>
-
-        <div class="desc" id="topicDesc">This interactive interface presents the major changes AI brought to our world in the past decade. Explore each area to see its impact.</div>
-
-        <div class="stat-row" id="statRow"></div>
-
-        <div class="visual" id="visual">
-          <div class="overlay"></div>
-          <svg id="topicSVG" width="100%" height="100%" viewBox="0 0 600 200" preserveAspectRatio="xMidYMid slice"></svg>
-        </div>
-
-        <div class="controls">
-          <button class="btn" id="prevBtn">◀ Previous</button>
-          <button class="btn" id="nextBtn">Next ▶</button>
-        </div>
+    <main>
+      <h2 id="title">Welcome</h2>
+      <p id="desc">Click a topic to view how AI has shaped different fields in the last decade — each comes with a cool chart.</p>
+      <div class="chart-area">
+        <canvas id="chart" width="600" height="250"></canvas>
+      </div>
+      <div class="controls">
+        <button class="ctrl" id="prevBtn">◀ Previous</button>
+        <button class="ctrl" id="nextBtn">Next ▶</button>
       </div>
     </main>
   </div>
 
   <script>
-    // Neural net background
-    const canvas = document.getElementById('bgCanvas');
-    const ctx = canvas.getContext('2d');
-    let W, H, nodes = [];
-
-    function resize(){
-      W = canvas.width = innerWidth;
-      H = canvas.height = innerHeight;
-      initNodes();
+    // Background neural net
+    const bg = document.getElementById('bgCanvas');
+    const bctx = bg.getContext('2d');
+    let W, H, points = [];
+    function resizeBG(){
+      W = bg.width = innerWidth;
+      H = bg.height = innerHeight;
+      points = Array.from({length:100},()=>({
+        x: Math.random()*W,
+        y: Math.random()*H,
+        vx: (Math.random()-0.5)*0.4,
+        vy: (Math.random()-0.5)*0.4
+      }));
     }
-
-    function initNodes(){
-      nodes = [];
-      const cols = Math.floor(W / 160);
-      const rows = Math.floor(H / 160);
-      for(let y=0;y<rows;y++){
-        for(let x=0;x<cols;x++){
-          nodes.push({
-            x: (x+0.5)*(W/cols) + (Math.random()-0.5)*40,
-            y: (y+0.5)*(H/rows) + (Math.random()-0.5)*40,
-            vx: (Math.random()-0.5)*0.2,
-            vy: (Math.random()-0.5)*0.2,
-            r: 1.8 + Math.random()*2.2
-          });
-        }
-      }
-    }
-
-    let hue = 170;
     function drawBG(){
-      ctx.clearRect(0,0,W,H);
-      for(let n of nodes){
-        n.x += n.vx; n.y += n.vy;
-        if(n.x<0||n.x>W) n.vx *= -1;
-        if(n.y<0||n.y>H) n.vy *= -1;
+      bctx.clearRect(0,0,W,H);
+      for(const p of points){
+        p.x += p.vx; p.y += p.vy;
+        if(p.x<0||p.x>W) p.vx*=-1;
+        if(p.y<0||p.y>H) p.vy*=-1;
       }
-      for(let i=0;i<nodes.length;i++){
-        for(let j=i+1;j<i+6 && j<nodes.length;j++){
-          const a = nodes[i], b = nodes[j];
-          const dx = a.x - b.x, dy = a.y - b.y;
-          const d = Math.hypot(dx, dy);
-          if(d < 220){
-            const alpha = 0.12 * (1 - d/220);
-            ctx.strokeStyle = `hsla(${hue}, 90%, 55%, ${alpha})`;
-            ctx.lineWidth = 1;
-            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+      for(let i=0;i<points.length;i++){
+        for(let j=i+1;j<i+6;j++){
+          const a=points[i],b=points[j];
+          const dx=a.x-b.x, dy=a.y-b.y, d=Math.hypot(dx,dy);
+          if(d<150){
+            bctx.strokeStyle=`rgba(0,255,224,${1-d/150})`;
+            bctx.lineWidth=0.5;
+            bctx.beginPath();
+            bctx.moveTo(a.x,a.y);
+            bctx.lineTo(b.x,b.y);
+            bctx.stroke();
           }
         }
       }
-      for(const n of nodes){
-        ctx.beginPath();
-        ctx.fillStyle = `hsla(${hue},90%,60%,0.98)`;
-        ctx.globalAlpha = 0.9;
-        ctx.arc(n.x, n.y, n.r, 0, Math.PI*2); ctx.fill();
-        ctx.globalAlpha = 1;
+    }
+    resizeBG();
+    addEventListener('resize', resizeBG);
+    (function anim(){drawBG();requestAnimationFrame(anim);})();
+
+    // Topics
+    const topics = [
+      {title:'AI Basics',desc:'Introduction to AI and machine learning.',chart:'bar'},
+      {title:'Communication',desc:'AI-powered translators and chatbots.',chart:'line'},
+      {title:'Healthcare',desc:'AI-assisted diagnosis and patient care.',chart:'pie'},
+      {title:'Education',desc:'Adaptive learning systems.',chart:'radar'},
+      {title:'Transportation',desc:'Autonomous vehicles and logistics.',chart:'scatter'},
+      {title:'Economy',desc:'Automation and AI-driven markets.',chart:'combo'},
+      {title:'Ethics',desc:'Bias, privacy and moral AI.',chart:'grid'},
+      {title:'Future',desc:'AI’s next decade of transformation.',chart:'block'}
+    ];
+
+    const tList = document.getElementById('topics');
+    topics.forEach((t,i)=>{
+      const b=document.createElement('button');
+      b.textContent=t.title;
+      b.className='topic-btn'+(i===0?' active':'');
+      b.onclick=()=>selectTopic(i);
+      tList.appendChild(b);
+    });
+
+    let current=0;
+    const title=document.getElementById('title');
+    const desc=document.getElementById('desc');
+    const chart=document.getElementById('chart');
+    const ctx=chart.getContext('2d');
+
+    function drawBar(){ctx.clearRect(0,0,600,250);const vals=[50,70,90,40,60];vals.forEach((v,i)=>{ctx.fillStyle=`rgba(0,255,224,${0.3+i*0.1})`;ctx.fillRect(80+i*90,250-v*2,40,v*2);});}
+    function drawLine(){ctx.clearRect(0,0,600,250);ctx.beginPath();ctx.moveTo(50,200);[100,200,300,400,500].forEach((x,i)=>{ctx.lineTo(x,200-Math.sin(i)*80-50);});ctx.strokeStyle='rgba(0,255,224,0.8)';ctx.lineWidth=2;ctx.stroke();}
+    function drawPie(){ctx.clearRect(0,0,600,250);const data=[30,20,25,25];const colors=['#00ffe0','#5eead4','#7af1da','#3ae8b7'];let start=0;data.forEach((v,i)=>{ctx.beginPath();ctx.moveTo(300,125);ctx.fillStyle=colors[i];ctx.arc(300,125,90,start,start+Math.PI*2*(v/100));ctx.fill();start+=Math.PI*2*(v/100);});}
+    function drawRadar(){ctx.clearRect(0,0,600,250);ctx.translate(300,125);const p=6,r=80;ctx.strokeStyle='rgba(0,255,224,0.4)';for(let i=0;i<p;i++){ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(r*Math.cos((i/p)*2*Math.PI),r*Math.sin((i/p)*2*Math.PI));ctx.stroke();}ctx.beginPath();ctx.moveTo(r,0);for(let i=1;i<=p;i++){ctx.lineTo(r*Math.cos((i/p)*2*Math.PI)*Math.random(),r*Math.sin((i/p)*2*Math.PI)*Math.random());}ctx.closePath();ctx.strokeStyle='#00ffe0';ctx.stroke();ctx.resetTransform();}
+    function drawScatter(){ctx.clearRect(0,0,600,250);for(let i=0;i<30;i++){ctx.beginPath();ctx.arc(Math.random()*600,Math.random()*250,3,0,Math.PI*2);ctx.fillStyle='rgba(0,255,224,0.7)';ctx.fill();}}
+    function drawCombo(){drawBar();ctx.beginPath();ctx.moveTo(100,200);ctx.lineTo(200,100);ctx.lineTo(300,150);ctx.lineTo(400,120);ctx.lineTo(500,180);ctx.strokeStyle='#fff';ctx.stroke();}
+    function drawGrid(){ctx.clearRect(0,0,600,250);for(let x=0;x<600;x+=30){for(let y=0;y<250;y+=30){ctx.fillStyle=`rgba(0,255,224,${Math.random()*0.5})`;ctx.fillRect(x,y,10,10);}}}
+    function drawBlock(){ctx.clearRect(0,0,600,250);for(let i=0;i<8;i++){ctx.fillStyle=`rgba(0,255,224,${0.2+i*0.1})`;ctx.fillRect(60*i+50,250-20*i,50,20*i);}}
+
+    function drawChart(type){
+      ctx.resetTransform();
+      switch(type){
+        case'bar':drawBar();break;
+        case'line':drawLine();break;
+        case'pie':drawPie();break;
+        case'radar':drawRadar();break;
+        case'scatter':drawScatter();break;
+        case'combo':drawCombo();break;
+        case'grid':drawGrid();break;
+        case'block':drawBlock();break;
       }
     }
 
-    function anim(){
-      drawBG();
-      requestAnimationFrame(anim);
-    }
-
-    addEventListener('resize', resize);
-    resize();
-    anim();
-
-    // Topics and visuals
-    const TOPICS = [
-      {title:'What is AI?', tag:'Definition', desc:'AI enables machines to learn and make decisions. It powers automation and smart decision-making.', stats:[{k:'Growth', v:'>10× in decade', pct: 85}], color:170, svg:makeDonutSVG},
-      {title:'Communication', tag:'Everyday', desc:'Chatbots and translators broke language barriers and connected billions.', stats:[{k:'Users', v:'1B+', pct: 75}], color:200, svg:makeDonutSVG},
-      {title:'Healthcare', tag:'Medicine', desc:'AI diagnoses diseases faster and assists doctors with precise analytics.', stats:[{k:'Accuracy', v:'90%+', pct: 90}], color:345, svg:makeDonutSVG},
-      {title:'Education', tag:'Learning', desc:'AI adapts to student needs, making learning personal and effective.', stats:[{k:'Engagement', v:'+40%', pct: 40}], color:200, svg:makeDonutSVG},
-      {title:'Transportation', tag:'Mobility', desc:'Self-driving systems and smart navigation made transport safer and efficient.', stats:[{k:'Accidents ↓', v:'30%', pct: 30}], color:210, svg:makeDonutSVG},
-      {title:'Work & Economy', tag:'Jobs', desc:'Automation changed work — repetitive tasks replaced, creative tasks expanded.', stats:[{k:'AI jobs ↑', v:'2×', pct: 50}], color:160, svg:makeDonutSVG},
-      {title:'Privacy & Ethics', tag:'Challenge', desc:'AI raises questions of data, bias and control—policy and ethics are vital.', stats:[{k:'Awareness', v:'Growing', pct: 60}], color:280, svg:makeDonutSVG},
-      {title:'Future Vision', tag:'Next decade', desc:'AI will be deeply integrated; human guidance and ethics will shape outcomes.', stats:[{k:'Integration', v:'Everywhere', pct: 70}], color:170, svg:makeDonutSVG}
-    ];
-
-    const topicList = document.getElementById('topicList');
-    const topicTitle = document.getElementById('topicTitle');
-    const topicDesc = document.getElementById('topicDesc');
-    const statRow = document.getElementById('statRow');
-    const topicSVG = document.getElementById('topicSVG');
-
-    let current = 0;
-
-    function renderTopicButtons(){
-      TOPICS.forEach((t,i)=>{
-        const btn = document.createElement('button');
-        btn.className = 'topic-btn' + (i === 0 ? ' active' : '');
-        btn.innerHTML = `<div class="topic-icon">${i+1}</div><div style="flex:1;text-align:left"><strong style="display:block">${t.title}</strong><span style="font-size:12px;color:var(--muted)">${t.tag}</span></div>`;
-        btn.onclick = ()=>{ selectTopic(i); highlightButton(i); };
-        topicList.appendChild(btn);
-      });
-    }
-
     function selectTopic(i){
-      current = i;
-      const t = TOPICS[i];
-      topicTitle.textContent = t.title;
-      topicDesc.textContent = t.desc;
-      statRow.innerHTML = '';
-      t.stats.forEach(s=>{
-        const el = document.createElement('div');
-        el.className = 'stat';
-        el.innerHTML = `<div style="font-size:12px;color:var(--muted)">${s.k}</div><div style="font-weight:800;margin-top:6px">${s.v}</div>`;
-        statRow.appendChild(el);
-      });
-      hue = t.color;
-      topicSVG.innerHTML = '';
-      t.svg(topicSVG, t.pct, t.color);
-      const vis = document.getElementById('visual');
-      vis.classList.remove('glow');
-      void vis.offsetWidth;
-      vis.classList.add('glow');
-    }
-
-    function highlightButton(i){
       document.querySelectorAll('.topic-btn').forEach(b=>b.classList.remove('active'));
-      const btns = document.querySelectorAll('.topic-btn');
-      if(btns[i]) btns[i].classList.add('active');
+      document.querySelectorAll('.topic-btn')[i].classList.add('active');
+      current=i;
+      const t=topics[i];
+      title.textContent=t.title;
+      desc.textContent=t.desc;
+      drawChart(t.chart);
     }
 
-    document.getElementById('prevBtn').onclick = ()=>{ selectTopic((current-1+TOPICS.length)%TOPICS.length); highlightButton(current); };
-    document.getElementById('nextBtn').onclick = ()=>{ selectTopic((current+1)%TOPICS.length); highlightButton(current); };
+    document.getElementById('prevBtn').onclick=()=>selectTopic((current-1+topics.length)%topics.length);
+    document.getElementById('nextBtn').onclick=()=>selectTopic((current+1)%topics.length);
 
-    renderTopicButtons();
-    selectTopic(0);
-
-    // Donut SVG generator
-    function makeDonutSVG(svg, pct, color){
-      const ns = 'http://www.w3.org/2000/svg';
-      const g = document.createElementNS(ns,'g');
-      // background circle
-      const cx = 300, cy = 100, r = 60;
-      const bg = document.createElementNS(ns,'circle');
-      bg.setAttribute('cx',cx); bg.setAttribute('cy',cy); bg.setAttribute('r',r);
-      bg.setAttribute('fill','none');
-      bg.setAttribute('stroke','rgba(255,255,255,0.1)');
-      bg.setAttribute('stroke-width','12');
-      g.appendChild(bg);
-      // foreground
-      const fg = document.createElementNS(ns,'circle');
-      fg.setAttribute('cx',cx); fg.setAttribute('cy',cy); fg.setAttribute('r',r);
-      fg.setAttribute('fill','none');
-      fg.setAttribute('stroke',`hsla(${color},90%,60%,0.9)`);
-      fg.setAttribute('stroke-width','12');
-      const circumference = 2 * Math.PI * r;
-      fg.setAttribute('stroke-dasharray', circumference);
-      fg.setAttribute('stroke-dashoffset', circumference);
-      fg.setAttribute('transform', `rotate(-90 ${cx} ${cy})`);
-      g.appendChild(fg);
-      // animate
-      const target = circumference * (1 - pct/100);
-      fg.animate([
-        { 'stroke-dashoffset': circumference },
-        { 'stroke-dashoffset': target }
-      ], {
-        duration: 1200,
-        fill: 'forwards',
-        easing: 'ease-out'
-      });
-      // percent text
-      const text = document.createElementNS(ns,'text');
-      text.setAttribute('x', cx); text.setAttribute('y', cy + 6);
-      text.setAttribute('text-anchor','middle');
-      text.setAttribute('fill','#eaf6f5');
-      text.setAttribute('font-size','20');
-      text.textContent = pct + '%';
-      g.appendChild(text);
-      svg.appendChild(g);
-    }
-
+    drawChart('bar');
   </script>
 </body>
 </html>
