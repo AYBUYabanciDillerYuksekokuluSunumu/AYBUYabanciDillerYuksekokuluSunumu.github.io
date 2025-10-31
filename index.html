@@ -1,206 +1,88 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>How AI Changed Our Lives — Interactive</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI Evolution — Interactive</title>
   <style>
-    :root {
-      --bg: #020617;
-      --card: #0a0f1f;
-      --accent: #00ffe0;
-      --accent-glow: 0 0 15px rgba(0, 255, 224, 0.7);
-      --muted: #94a3b8;
-      --glass: rgba(255, 255, 255, 0.04);
+    :root{
+      --bg:#010114;
+      --card:rgba(2,8,20,0.6);
+      --muted:#9aa7b5;
+      --glass:rgba(255,255,255,0.03);
+      --ui-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     }
-    html, body {
-      height: 100%;
-      margin: 0;
-      font-family: 'Orbitron', sans-serif;
-      background: radial-gradient(circle at 50% 20%, #031235, #000);
-      color: #e6eef6;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 28px;
-    }
-    .wrap {
-      width: 1100px;
-      max-width: 96%;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.05));
-      border-radius: 18px;
-      box-shadow: 0 0 50px rgba(0, 255, 224, 0.15);
-      overflow: hidden;
-      display: grid;
-      grid-template-columns: 340px 1fr;
-      position: relative;
-    }
-    .sidebar {
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.06));
-      padding: 22px;
-      border-right: 1px solid rgba(255, 255, 255, 0.05);
-    }
-    h1 {
-      margin: 0 0 6px 0;
-      font-size: 22px;
-      color: var(--accent);
-      text-shadow: var(--accent-glow);
-    }
-    p.lead {
-      margin: 0 0 18px 0;
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .topic-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .topic-btn {
-      background: var(--glass);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 12px;
-      border-radius: 10px;
-      color: inherit;
-      text-align: left;
-      cursor: pointer;
-      transition: transform .15s, background .15s, box-shadow .2s;
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    .topic-btn:hover {
-      transform: translateY(-3px);
-      background: rgba(255, 255, 255, 0.05);
-      box-shadow: var(--accent-glow);
-    }
-    .topic-btn.active {
-      background: linear-gradient(90deg, var(--accent), #0ff);
-      color: #001018;
-      box-shadow: var(--accent-glow);
-    }
-    .topic-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.06);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-    }
-    .content {
-      padding: 28px;
-      background: linear-gradient(160deg, rgba(255, 255, 255, 0.03), rgba(0, 255, 224, 0.03));
-    }
-    .card {
-      background: rgba(255, 255, 255, 0.02);
-      padding: 22px;
-      border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-    .title-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    h2 {
-      margin: 0;
-      font-size: 20px;
-      color: var(--accent);
-      text-shadow: var(--accent-glow);
-    }
-    .stat-row {
-      display: flex;
-      gap: 14px;
-      margin-top: 14px;
-    }
-    .stat {
-      background: rgba(255, 255, 255, 0.03);
-      padding: 10px;
-      border-radius: 10px;
-      min-width: 120px;
-      text-align: center;
-    }
-    .desc {
-      margin-top: 14px;
-      color: var(--muted);
-      line-height: 1.45;
-    }
-    .img-placeholder {
-      margin-top: 16px;
-      border-radius: 8px;
-      overflow: hidden;
-      height: 160px;
-      background: rgba(0, 255, 224, 0.05);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--muted);
-      font-size: 14px;
-    }
-    .controls {
-      display: flex;
-      gap: 12px;
-      margin-top: 18px;
-    }
-    .btn {
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: 0;
-      cursor: pointer;
-      background: var(--accent);
-      color: #001018;
-      font-weight: 700;
-      transition: transform .15s, box-shadow .2s;
-    }
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--accent-glow);
-    }
-    .corner-link {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: var(--accent);
-      color: #001018;
-      padding: 8px 12px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      box-shadow: var(--accent-glow);
-      transition: background .2s, transform .2s;
-    }
-    .corner-link:hover {
-      background: #5eead4;
-      transform: scale(1.05);
-    }
-    @media (max-width: 880px) {
-      .wrap {grid-template-columns: 1fr;}
-      .sidebar {order: 2;}
-      .content {order: 1;}
-    }
+    html,body{height:100%;margin:0;font-family:var(--ui-font);background:var(--bg);color:#eaf6f5}
+
+    /* full-canvas brain grid behind everything */
+    #bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+    .wrap{position:relative;z-index:1;max-width:1100px;margin:28px auto;border-radius:14px;overflow:hidden;display:grid;grid-template-columns:340px 1fr;gap:0;backdrop-filter:blur(6px)}
+
+    /* side */
+    .sidebar{padding:26px;background:linear-gradient(180deg, rgba(0,0,0,0.35), rgba(2,8,20,0.55));border-right:1px solid rgba(255,255,255,0.03)}
+    h1{margin:0;font-size:22px;color:transparent;background:linear-gradient(90deg,#00ffe0,#5eead4);-webkit-background-clip:text}
+    p.lead{margin:8px 0 18px;color:var(--muted);font-size:13px}
+    .topic-list{display:flex;flex-direction:column;gap:10px}
+    .topic-btn{display:flex;gap:10px;align-items:center;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));cursor:pointer;transition:transform .12s, box-shadow .12s}
+    .topic-btn:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,255,224,0.06)}
+    .topic-btn.active{box-shadow:0 10px 30px rgba(0,255,224,0.15);background:linear-gradient(90deg, rgba(0,255,224,0.08), rgba(94,234,212,0.06))}
+    .topic-icon{width:40px;height:40px;border-radius:8px;background:rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;font-weight:700;color:#cff}
+
+    /* main */
+    .content{padding:28px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.05));}
+    .card{padding:20px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.04));border:1px solid rgba(255,255,255,0.03)}
+    .title-row{display:flex;justify-content:space-between;align-items:center}
+    h2{margin:0;font-size:20px;color:transparent;background:linear-gradient(90deg,#00ffe0,#7af1da);-webkit-background-clip:text}
+    .desc{margin-top:12px;color:var(--muted);line-height:1.5}
+    .stat-row{display:flex;gap:12px;margin-top:14px}
+    .stat{min-width:120px;padding:10px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.03));border:1px solid rgba(255,255,255,0.02);text-align:center}
+    .visual{margin-top:16px;height:200px;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.4))}
+
+    .visual img{max-width:100%;max-height:100%;filter:drop-shadow(0 8px 20px rgba(0,255,224,0.06));opacity:0.98}
+    .visual .overlay{position:absolute;inset:0;background:linear-gradient(90deg, rgba(0,255,224,0.02), rgba(0,0,0,0));pointer-events:none}
+
+    .controls{display:flex;gap:12px;margin-top:18px}
+    .btn{padding:10px 14px;border-radius:10px;border:0;cursor:pointer;background:transparent;color:#bafbe8;font-weight:700;border:1px solid rgba(0,255,224,0.12)}
+    .btn:hover{box-shadow:0 8px 30px rgba(0,255,224,0.08);transform:translateY(-2px)}
+
+    .corner-link{position:absolute;top:12px;right:12px;padding:8px 10px;border-radius:8px;background:linear-gradient(90deg,#00ffe0,#5eead4);color:#001018;font-weight:700;text-decoration:none;z-index:3}
+
+    /* neon glow when active topic changes */
+    .glow{box-shadow:0 6px 28px rgba(0,255,224,0.12), 0 0 80px rgba(0,255,224,0.04)}
+
+    @media (max-width:900px){.wrap{grid-template-columns:1fr}.sidebar{order:2}.content{order:1}.visual{height:140px}}
   </style>
 </head>
 <body>
+  <canvas id="bgCanvas"></canvas>
+
   <div class="wrap">
     <a class="corner-link" href="https://aybusunum06.github.io" target="_blank">aybusunum06.github.io</a>
+
     <aside class="sidebar">
       <h1>AI Evolution</h1>
-      <p class="lead">Click a topic to reveal quick AI insights and futuristic stats.</p>
+      <p class="lead">Interactive demo — click a topic to reveal a short summary, a visual and a quick stat.</p>
       <div class="topic-list" id="topicList"></div>
-      <footer style="margin-top:18px;color:var(--muted);font-size:13px;">Made by <strong>beşincisafa</strong></footer>
+      <footer style="margin-top:18px;color:var(--muted);font-size:13px">Made by <strong>beşincisafa</strong></footer>
     </aside>
 
     <main class="content">
-      <div class="card" id="contentCard">
+      <div class="card">
         <div class="title-row">
           <h2 id="topicTitle">Welcome</h2>
           <div id="topicTag" style="color:var(--muted);font-size:13px">Select a topic</div>
         </div>
+
         <div class="desc" id="topicDesc">This interactive interface presents the major changes AI brought to our world in the past decade. Explore each area to see its impact.</div>
+
         <div class="stat-row" id="statRow"></div>
-        <div class="img-placeholder" id="imgPlaceholder">Topic visual</div>
+
+        <div class="visual" id="visual">
+          <div class="overlay"></div>
+          <svg id="topicSVG" width="100%" height="100%" viewBox="0 0 600 200" preserveAspectRatio="xMidYMid slice"></svg>
+        </div>
+
         <div class="controls">
           <button class="btn" id="prevBtn">◀ Previous</button>
           <button class="btn" id="nextBtn">Next ▶</button>
@@ -210,60 +92,158 @@
   </div>
 
   <script>
+    /* ---------- Animated neural network background ---------- */
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    let W, H, nodes = [];
+
+    function resize(){
+      W = canvas.width = innerWidth;
+      H = canvas.height = innerHeight;
+      initNodes();
+    }
+
+    function initNodes(){
+      nodes = [];
+      const cols = Math.floor(W / 160);
+      const rows = Math.floor(H / 160);
+      for(let y=0;y<rows;y++){
+        for(let x=0;x<cols;x++){
+          nodes.push({
+            x: (x+0.5)* (W/cols) + (Math.random()-0.5)*40,
+            y: (y+0.5)* (H/rows) + (Math.random()-0.5)*40,
+            vx: (Math.random()-0.5)*0.2,
+            vy: (Math.random()-0.5)*0.2,
+            r: 1.8 + Math.random()*2.2
+          });
+        }
+      }
+    }
+
+    let hue = 170; // green-cyan base
+    function drawBG(){
+      ctx.clearRect(0,0,W,H);
+      // dim overlay grid
+      for(let i=0;i<nodes.length;i++){
+        const n = nodes[i];
+        n.x += n.vx; n.y += n.vy;
+        if(n.x<0||n.x>W) n.vx *= -1;
+        if(n.y<0||n.y>H) n.vy *= -1;
+      }
+      // draw connections
+      for(let i=0;i<nodes.length;i++){
+        for(let j=i+1;j<i+6 && j<nodes.length;j++){
+          const a=nodes[i], b=nodes[j];
+          const dx=a.x-b.x, dy=a.y-b.y; const d=Math.hypot(dx,dy);
+          if(d<220){
+            const alpha = 0.12*(1 - d/220);
+            ctx.strokeStyle = `hsla(${hue}, 90%, 55%, ${alpha})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+          }
+        }
+      }
+      // draw nodes
+      for(const n of nodes){
+        ctx.beginPath();
+        ctx.fillStyle = `hsla(${hue},90%,60%,0.98)`;
+        ctx.globalAlpha = 0.9;
+        ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    function anim(){ drawBG(); requestAnimationFrame(anim); }
+    addEventListener('resize', resize);
+    resize(); anim();
+
+    /* ---------- Topics & visuals (SVG generator) ---------- */
     const TOPICS = [
-      {title:'What is AI?', tag:'Definition', desc:'Artificial Intelligence enables machines to learn and think. It powers automation and smart decision-making.', stats:[{k:'Growth',v:'>10x in a decade'},{k:'Impact',v:'Global scale'}]},
-      {title:'Communication', tag:'Everyday', desc:'Chatbots, translators, and AI voice assistants broke language barriers and connected billions.', stats:[{k:'Users',v:'1B+'},{k:'Languages',v:'100+'}]},
-      {title:'Healthcare', tag:'Medicine', desc:'AI diagnoses diseases faster, predicts risks, and assists doctors with precise analytics.', stats:[{k:'Accuracy',v:'90%+'},{k:'Speed',v:'x5 faster'}]},
-      {title:'Education', tag:'Learning', desc:'AI adapts to each student’s needs, making education more personal and effective.', stats:[{k:'Engagement',v:'+40%'},{k:'Adoption',v:'Global'}]},
-      {title:'Transportation', tag:'Mobility', desc:'Self-driving systems and smart navigation made transport safer and more efficient.', stats:[{k:'Accidents',v:'↓30%'},{k:'Efficiency',v:'↑25%'}]},
-      {title:'Work & Economy', tag:'Jobs', desc:'Automation changed how we work — repetitive tasks gone, creative ones grew.', stats:[{k:'AI jobs',v:'2x increase'},{k:'Automation',v:'Commonplace'}]},
-      {title:'Privacy & Ethics', tag:'Challenge', desc:'With great power comes responsibility — AI raises questions of data, bias, and control.', stats:[{k:'Laws',v:'Evolving'},{k:'Awareness',v:'Growing'}]},
-      {title:'Future Vision', tag:'Next decade', desc:'AI will become deeply integrated, amplifying human creativity and decisions.', stats:[{k:'Integration',v:'Every field'},{k:'Focus',v:'Ethics'}]}
+      {title:'What is AI?', tag:'Definition', desc:'AI enables machines to learn and make decisions. It powers automation and smart decision-making.', stats:[{k:'Growth',v:'>10x in decade'},{k:'Devices',v:'Billions'}], color:170, svg:makeNetSVG},
+      {title:'Communication', tag:'Everyday', desc:'Chatbots and translators broke language barriers and connected billions.', stats:[{k:'Users',v:'1B+'},{k:'Languages',v:'100+'}], color:200, svg:makeSpeechSVG},
+      {title:'Healthcare', tag:'Medicine', desc:'AI diagnoses diseases faster and assists doctors with precise analytics.', stats:[{k:'Accuracy',v:'90%+'},{k:'Speed',v:'x5 faster'}], color:345, svg:makeHealthSVG},
+      {title:'Education', tag:'Learning', desc:'AI adapts to student needs, making learning personal and effective.', stats:[{k:'Engagement',v:'+40%'},{k:'Adoption',v:'Global'}], color:200, svg:makeEduSVG},
+      {title:'Transportation', tag:'Mobility', desc:'Self-driving systems and smart navigation made transport safer and efficient.', stats:[{k:'Accidents',v:'↓30%'},{k:'Efficiency',v:'↑25%'}], color:210, svg:makeTransportSVG},
+      {title:'Work & Economy', tag:'Jobs', desc:'Automation changed work — repetitive tasks replaced, creative tasks expanded.', stats:[{k:'AI jobs',v:'2x increase'},{k:'Automation',v:'Widespread'}], color:160, svg:makeWorkSVG},
+      {title:'Privacy & Ethics', tag:'Challenge', desc:'AI raises questions of data, bias and control—policy and ethics are vital.', stats:[{k:'Laws',v:'Evolving'},{k:'Awareness',v:'Growing'}], color:280, svg:makeEthicsSVG},
+      {title:'Future Vision', tag:'Next decade', desc:'AI will be deeply integrated; human guidance and ethics will shape outcomes.', stats:[{k:'Integration',v:'Every field'},{k:'Focus',v:'Ethics'}], color:170, svg:makeFutureSVG}
     ];
 
-    const topicList=document.getElementById('topicList');
-    const topicTitle=document.getElementById('topicTitle');
-    const topicDesc=document.getElementById('topicDesc');
-    const statRow=document.getElementById('statRow');
-    const imgPlaceholder=document.getElementById('imgPlaceholder');
-    let current=0;
+    const topicList = document.getElementById('topicList');
+    const topicTitle = document.getElementById('topicTitle');
+    const topicDesc = document.getElementById('topicDesc');
+    const statRow = document.getElementById('statRow');
+    const topicSVG = document.getElementById('topicSVG');
+
+    let current = 0;
 
     function renderTopicButtons(){
       TOPICS.forEach((t,i)=>{
-        const btn=document.createElement('button');
-        btn.className='topic-btn'+(i===0?' active':'');
-        btn.innerHTML=`<div class="topic-icon">${i+1}</div><div style="flex:1"><strong>${t.title}</strong><div style="font-size:12px;color:var(--muted)">${t.tag}</div></div>`;
-        btn.onclick=()=>{selectTopic(i);highlightButton(i);}
+        const btn = document.createElement('button'); btn.className='topic-btn'+(i===0?' active':'');
+        btn.innerHTML = `<div class="topic-icon">${i+1}</div><div style="flex:1;text-align:left"><strong style="display:block">${t.title}</strong><span style="font-size:12px;color:var(--muted)">${t.tag}</span></div>`;
+        btn.onclick = ()=>{ selectTopic(i); highlightButton(i); }
         topicList.appendChild(btn);
       });
     }
 
     function selectTopic(i){
-      current=i;
-      const t=TOPICS[i];
-      topicTitle.textContent=t.title;
-      topicDesc.textContent=t.desc;
-      statRow.innerHTML='';
-      t.stats.forEach(s=>{
-        const el=document.createElement('div');
-        el.className='stat';
-        el.innerHTML=`<div style="font-size:13px;color:var(--muted)">${s.k}</div><div style="font-weight:700;margin-top:6px">${s.v}</div>`;
-        statRow.appendChild(el);
-      });
-      imgPlaceholder.textContent=t.tag+ ' visual';
+      const t = TOPICS[i];
+      current = i;
+      topicTitle.textContent = t.title;
+      topicDesc.textContent = t.desc;
+      statRow.innerHTML = '';
+      t.stats.forEach(s=>{ const el=document.createElement('div'); el.className='stat'; el.innerHTML=`<div style="font-size:12px;color:var(--muted)">${s.k}</div><div style="font-weight:800;margin-top:6px">${s.v}</div>`; statRow.appendChild(el); });
+      // change background hue for glow
+      hue = t.color;
+      // redraw svg visual
+      topicSVG.innerHTML = '';
+      t.svg(topicSVG, t.color);
+      // small flash glow on visual
+      const vis = document.getElementById('visual'); vis.classList.remove('glow'); void vis.offsetWidth; vis.classList.add('glow');
     }
 
-    function highlightButton(i){
-      document.querySelectorAll('.topic-btn').forEach(b=>b.classList.remove('active'));
-      const btns=document.querySelectorAll('.topic-btn');
-      if(btns[i]) btns[i].classList.add('active');
+    function highlightButton(i){ document.querySelectorAll('.topic-btn').forEach(b=>b.classList.remove('active')); const btns=document.querySelectorAll('.topic-btn'); if(btns[i]) btns[i].classList.add('active'); }
+
+    document.getElementById('prevBtn').onclick = ()=>{ selectTopic((current-1+TOPICS.length)%TOPICS.length); highlightButton(current); }
+    document.getElementById('nextBtn').onclick = ()=>{ selectTopic((current+1)%TOPICS.length); highlightButton(current); }
+
+    renderTopicButtons(); selectTopic(0);
+
+    /* ---------- SVG generators for each topic (abstract visuals) ---------- */
+    function makeNetSVG(svg, color){
+      const ns = 'http://www.w3.org/2000/svg';
+      const g = document.createElementNS(ns,'g');
+      for(let i=0;i<24;i++){
+        const cx = 40 + Math.random()*520; const cy = 20 + Math.random()*160; const r = 6 + Math.random()*12;
+        const c = document.createElementNS(ns,'circle'); c.setAttribute('cx',cx); c.setAttribute('cy',cy); c.setAttribute('r',r);
+        c.setAttribute('fill',`hsla(${color},90%,60%,0.12)`); c.setAttribute('stroke',`hsla(${color},90%,60%,0.8)`); c.setAttribute('stroke-width','0.8'); g.appendChild(c);
+      }
+      // lines
+      for(let i=0;i<30;i++){
+        const x1 = 40 + Math.random()*520; const y1 = 20 + Math.random()*160; const x2 = 40 + Math.random()*520; const y2 = 20 + Math.random()*160;
+        const l = document.createElementNS(ns,'line'); l.setAttribute('x1',x1); l.setAttribute('y1',y1); l.setAttribute('x2',x2); l.setAttribute('y2',y2);
+        l.setAttribute('stroke',`hsla(${color},90%,60%,0.18)`); l.setAttribute('stroke-width','1'); g.appendChild(l);
+      }
+      svg.appendChild(g);
     }
 
-    document.getElementById('prevBtn').onclick=()=>{selectTopic((current-1+TOPICS.length)%TOPICS.length);highlightButton(current);};
-    document.getElementById('nextBtn').onclick=()=>{selectTopic((current+1)%TOPICS.length);highlightButton(current);};
+    function makeSpeechSVG(svg,color){ const ns='http://www.w3.org/2000/svg'; const g=document.createElementNS(ns,'g'); const rect=document.createElementNS(ns,'rect'); rect.setAttribute('x',60);rect.setAttribute('y',40);rect.setAttribute('width',480);rect.setAttribute('height',120);rect.setAttribute('rx',12);rect.setAttribute('fill',`linear-gradient(0,rgba(255,255,255,0.02),transparent)`); rect.setAttribute('fill',`hsla(${color},90%,40%,0.06)`); g.appendChild(rect); for(let i=0;i<10;i++){const p=document.createElementNS(ns,'circle');p.setAttribute('cx',140+i*40);p.setAttribute('cy',100+Math.sin(i)*18);p.setAttribute('r',6+Math.abs(Math.sin(i))*6);p.setAttribute('fill',`hsla(${color},90%,60%,0.9)`);g.appendChild(p);} svg.appendChild(g);} 
 
-    renderTopicButtons();
-    selectTopic(0);
+    function makeHealthSVG(svg,color){const ns='http://www.w3.org/2000/svg';const g=document.createElementNS(ns,'g');const cross=document.createElementNS(ns,'rect');cross.setAttribute('x',260);cross.setAttribute('y',50);cross.setAttribute('width',80);cross.setAttribute('height',100);cross.setAttribute('rx',10);cross.setAttribute('fill',`hsla(${color},90%,60%,0.12)`);g.appendChild(cross);const plus=document.createElementNS(ns,'path');plus.setAttribute('d','M300 70 v30 h30 v20 h-30 v30 h-20 v-30 h-30 v-20 h30 v-30 z');plus.setAttribute('fill',`hsla(${color},90%,60%,0.9)`);g.appendChild(plus);svg.appendChild(g);} 
+
+    function makeEduSVG(svg,color){const ns='http://www.w3.org/2000/svg';const g=document.createElementNS(ns,'g');for(let i=0;i<6;i++){const tri=document.createElementNS(ns,'polygon');const x=80+i*80;const points=`${x},150 ${x+40},50 ${x+80},150`;tri.setAttribute('points',points);tri.setAttribute('fill',`hsla(${color},90%,60%,${0.08+i*0.1})`);g.appendChild(tri);}svg.appendChild(g);} 
+
+    function makeTransportSVG(svg,color){const ns='http://www.w3.org/2000/svg';const g=document.createElementNS(ns,'g');const car=document.createElementNS(ns,'rect');car.setAttribute('x',120);car.setAttribute('y',100);car.setAttribute('width',360);car.setAttribute('height',40);car.setAttribute('rx',10);car.setAttribute('fill',`hsla(${color},90%,60%,0.12)`);g.appendChild(car);for(let i=0;i<6;i++){const circle=document.createElementNS(ns,'circle');circle.setAttribute('cx',160+i*60);circle.setAttribute('cy',150);circle.setAttribute('r',10);circle.setAttribute('fill',`hsla(${color},90%,60%,0.9)`);g.appendChild(circle);}svg.appendChild(g);} 
+
+    function makeWorkSVG(svg,color){const ns='http://www.w3.org/2000/svg';const g=document.createElementNS(ns,'g');for(let i=0;i<4;i++){const rect=document.createElementNS(ns,'rect');rect.setAttribute('x',60+i*120);rect.setAttribute('y',60);rect.setAttribute('width',80);rect.setAttribute('height',80);rect.setAttribute('rx',8);rect.setAttribute('fill',`hsla(${color},90%,60%,${0.12+i*0.06})`);g.appendChild(rect);}svg.appendChild(g);} 
+
+    function makeEthicsSVG(svg,color){const ns='http://www.w3.org/2000/svg';const g=document.createElementNS(ns,'g');const shield=document.createElementNS(ns,'path');shield.setAttribute('d','M300 30 l80 40 v40 c0 40 -80 70 -80 70 s-80 -30 -80 -70 v-40 z');shield.setAttribute('fill',`hsla(${color},90%,60%,0.12)`);g.appendChild(shield);const lock=document.createElementNS(ns,'rect');lock.setAttribute('x',280);lock.setAttribute('y',70);lock.setAttribute('width',40);lock.setAttribute('height',40);lock.setAttribute('rx',6);lock.setAttribute('fill',`hsla(${color},90%,60%,0.9)`);g.appendChild(lock);svg.appendChild(g);} 
+
+    function makeFutureSVG(svg,color){const ns='http://www.w3.org/2000/svg';const g=document.createElementNS(ns,'g');for(let i=0;i<18;i++){const x=20 + Math.random()*560; const y=20 + Math.random()*160; const circ=document.createElementNS(ns,'circle');circ.setAttribute('cx',x);circ.setAttribute('cy',y);circ.setAttribute('r',2+Math.random()*6);circ.setAttribute('fill',`hsla(${color},90%,60%,${0.6*Math.random()})`);g.appendChild(circ);}svg.appendChild(g);} 
+
+    // small helper: animate hue gently
+    setInterval(()=>{ hue += 0.2; if(hue>360) hue=0; }, 120);
+
   </script>
 </body>
 </html>
