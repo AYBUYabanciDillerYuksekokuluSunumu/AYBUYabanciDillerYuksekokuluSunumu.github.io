@@ -13,17 +13,25 @@ html,body{margin:0;height:100%;font-family:Arial,sans-serif;color:var(--fg);back
 #bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 .wrap{position:relative;z-index:1;display:grid;grid-template-columns:300px 1fr;gap:0;height:100%;}
 aside{padding:20px;background:linear-gradient(180deg,rgba(4,6,10,0.75),rgba(8,12,20,0.88));border-right:1px solid rgba(255,255,255,0.03);overflow:auto;}
-h1{font-size:20px;background:linear-gradient(90deg,var(--accent),#7ef0d0);-webkit-background-clip:text;color:transparent;margin:0;}
+h1{font-size:20px;background:linear-gradient(90deg,var(--accent),#7ef0d0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:0;}
 .topic-list{display:flex;flex-direction:column;gap:10px;margin-top:20px;}
-.topic-btn{padding:10px;border-radius:8px;border:none;background:rgba(255,255,255,0.05);color:#cff;cursor:pointer;text-align:left;transition:0.2s;}
+.topic-btn{padding:10px;border-radius:8px;border:none;background:rgba(255,255,255,0.05);color:#cff;cursor:pointer;text-align:left;transition:0.2s;font-size:14px;}
+.topic-btn:hover{background:rgba(255,255,255,0.08);}
 .topic-btn.active{background:linear-gradient(90deg,rgba(0,200,167,0.3),rgba(126,240,208,0.1));box-shadow:0 0 12px rgba(0,200,167,0.3);}
-main{padding:20px;}
+main{padding:20px;overflow:auto;}
 .card{background:var(--card-bg);border-radius:12px;padding:20px;min-height:500px;position:relative;}
-h2{margin:0;font-size:22px;color:transparent;background:linear-gradient(90deg,var(--accent),#7af1da);-webkit-background-clip:text;}
+h2{margin:0;font-size:22px;background:linear-gradient(90deg,var(--accent),#7af1da);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .desc{margin-top:10px;color:var(--muted);line-height:1.5;font-size:15px;}
-.chart-wrap{margin-top:20px;background:rgba(0,0,0,0.2);padding:15px;border-radius:12px;}
-.controls{margin-top:15px;display:flex;gap:10px;}
-.btn{padding:8px 12px;background:none;border:1px solid rgba(0,200,167,0.3);border-radius:8px;color:#bafbe8;cursor:pointer;}
+.chart-wrap{margin-top:20px;background:rgba(0,0,0,0.2);padding:15px;border-radius:12px;height:400px;position:relative;}
+.controls{margin-top:15px;display:flex;gap:10px;flex-wrap:wrap;}
+.btn{padding:8px 12px;background:none;border:1px solid rgba(0,200,167,0.3);border-radius:8px;color:#bafbe8;cursor:pointer;transition:0.2s;}
+.btn:hover{background:rgba(0,200,167,0.1);border-color:var(--accent);}
+
+@media (max-width: 768px) {
+  .wrap{grid-template-columns:1fr;grid-template-rows:auto 1fr;}
+  aside{border-right:none;border-bottom:1px solid rgba(255,255,255,0.03);max-height:30vh;}
+  .chart-wrap{height:300px;}
+}
 </style>
 </head>
 <body>
@@ -48,6 +56,50 @@ h2{margin:0;font-size:22px;color:transparent;background:linear-gradient(90deg,va
 </div>
 
 <script>
+// Animated background
+const bgCanvas = document.getElementById('bgCanvas');
+const ctx = bgCanvas.getContext('2d');
+bgCanvas.width = window.innerWidth;
+bgCanvas.height = window.innerHeight;
+
+const particles = [];
+for(let i = 0; i < 80; i++) {
+  particles.push({
+    x: Math.random() * bgCanvas.width,
+    y: Math.random() * bgCanvas.height,
+    vx: (Math.random() - 0.5) * 0.5,
+    vy: (Math.random() - 0.5) * 0.5,
+    radius: Math.random() * 2 + 1
+  });
+}
+
+function animateBg() {
+  ctx.fillStyle = 'rgba(0,0,0,0.05)';
+  ctx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+  
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    
+    if(p.x < 0 || p.x > bgCanvas.width) p.vx *= -1;
+    if(p.y < 0 || p.y > bgCanvas.height) p.vy *= -1;
+    
+    ctx.fillStyle = 'rgba(0,201,167,0.3)';
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  
+  requestAnimationFrame(animateBg);
+}
+animateBg();
+
+window.addEventListener('resize', () => {
+  bgCanvas.width = window.innerWidth;
+  bgCanvas.height = window.innerHeight;
+});
+
+// Topics data
 const topics=[
 {title:"1. Healthcare",desc:"AI supports doctors by detecting illnesses faster and helps with precise treatment planning. It improves patient care, reduces errors, and speeds up medical decisions.",chart:"bar",stats:[{label:"Accuracy",value:91},{label:"Speed",value:83},{label:"Adoption",value:70}],source:"WHO & AI 2024"},
 {title:"2. Transportation",desc:"AI helps vehicles drive smarter, routes get optimized, and maintenance is predicted. This makes travel safer, faster, and more efficient.",chart:"line",stats:[{label:"Safety",value:76},{label:"Efficiency",value:70},{label:"Adoption",value:60}],source:"Transport AI 2023-24"},
@@ -59,7 +111,7 @@ const topics=[
 {title:"8. Home & Lifestyle",desc:"Smart homes use AI for lighting, heating, and chores. Daily life becomes easier, more energy-efficient, and comfortable.",chart:"bar",stats:[{label:"Comfort",value:82},{label:"Energy Save",value:73},{label:"Usage",value:63}],source:"IoT reports 2023-24"},
 {title:"9. Security",desc:"AI monitors threats and fraud, protecting people and businesses. Detection is faster and security systems are stronger.",chart:"doughnut",stats:[{label:"Detection",value:88},{label:"Response",value:80},{label:"Accuracy",value:85}],source:"Cybersecurity 2024"},
 {title:"10. The Future",desc:"AI will continue helping medicine, climate action, and exploration. Ethics and strong rules will guide its growth responsibly.",chart:"pie",stats:[{label:"Innovation",value:90},{label:"Ethics Focus",value:70},{label:"Trust",value:60}],source:"Global AI 2024"},
-{title:"11. Thank You",desc:"Thank you for listening! We appreciate your time. Here’s a quick summary of the audience engagement during this presentation.\n\nPrepared by Veysel Safa Dilsiz",chart:"bar",stats:[{label:"Attended",value:88},{label:"Followed Closely",value:65},{label:"Participated",value:45}],source:"Presentation engagement stats"}
+{title:"11. Thank You",desc:"Thank you for listening! We appreciate your time. Here's a quick summary of the audience engagement during this presentation.\n\nPrepared by Veysel Safa Dilsiz",chart:"bar",stats:[{label:"Attended",value:88},{label:"Followed Closely",value:65},{label:"Participated",value:45}],source:"Presentation engagement stats"}
 ];
 
 let current=0;
@@ -74,11 +126,21 @@ function renderChart(topic){
   if(chartInstance) chartInstance.destroy();
   const labels=topic.stats.map(s=>s.label);
   const data=topic.stats.map(s=>s.value);
-  const bgColors=data.map((v,i)=>`hsla(${50+i*30},90%,60%,0.8)`);
-  chartInstance=new Chart(chartCanvas,{
+  const bgColors=data.map((v,i)=>hsla(${50+i*30},90%,60%,0.8));
+  
+  const config = {
     type: topic.chart,
     plugins:[ChartDataLabels],
-    data:{labels,datasets:[{label:topic.title,data,data,backgroundColor:bgColors,borderColor:"#fff",borderWidth:2}]},
+    data:{
+      labels,
+      datasets:[{
+        label:topic.title,
+        data,
+        backgroundColor:bgColors,
+        borderColor:"#fff",
+        borderWidth:2
+      }]
+    },
     options:{
       plugins:{
         legend:{labels:{color:"#eaf6f5"}},
@@ -91,13 +153,27 @@ function renderChart(topic){
         }
       },
       responsive:true,
-      maintainAspectRatio:false,
-      scales:{
-        x:{ticks:{color:'#00c9a7'},grid:{color:'rgba(255,255,255,0.04)'}},
-        y:{ticks:{color:'#00c9a7'},grid:{color:'rgba(255,255,255,0.04)'},beginAtZero:true}
-      }
+      maintainAspectRatio:false
     }
-  });
+  };
+  
+  // Add scales for chart types that support them
+  if(['bar','line'].includes(topic.chart)){
+    config.options.scales = {
+      x:{ticks:{color:'#00c9a7'},grid:{color:'rgba(255,255,255,0.04)'}},
+      y:{ticks:{color:'#00c9a7'},grid:{color:'rgba(255,255,255,0.04)'},beginAtZero:true}
+    };
+  } else if(['radar','polarArea'].includes(topic.chart)){
+    config.options.scales = {
+      r:{
+        ticks:{color:'#00c9a7',backdropColor:'transparent'},
+        grid:{color:'rgba(255,255,255,0.1)'},
+        pointLabels:{color:'#00c9a7'}
+      }
+    };
+  }
+  
+  chartInstance=new Chart(chartCanvas, config);
 }
 
 function showTopic(i){
