@@ -126,7 +126,7 @@ function renderChart(topic){
   if(chartInstance) chartInstance.destroy();
   const labels=topic.stats.map(s=>s.label);
   const data=topic.stats.map(s=>s.value);
-  const bgColors=data.map((v,i)=>hsla(${50+i*30},90%,60%,0.8));
+  const bgColors=data.map((v,i)=>`hsla(${50+i*30},90%,60%,0.8)`);
   
   const config = {
     type: topic.chart,
